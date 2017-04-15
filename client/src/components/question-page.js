@@ -1,17 +1,20 @@
 import React from 'react';
 import * as Cookies from 'js-cookie';
+import Websocket from 'react-websocket';
+
 
 export default class QuestionPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            questions: []
+            questions: [],
+            tweets: []
         };
     }
 
     componentDidMount() {
         const accessToken = Cookies.get('accessToken');
-        fetch('/api/questions', {
+        fetch('/api/twitter', {
                 headers: {
                     'Authorization': `Bearer ${accessToken}`
                 }
@@ -20,22 +23,40 @@ export default class QuestionPage extends React.Component {
                 throw new Error(res.statusText);
             }
             return res.json();
-        }).then(questions =>
+        }).then(tweets =>
             this.setState({
-                questions
+                tweets
             })
         );
+
+        
     }
 
+     handleData(data) {
+      console.log("data", data)
+      // this.setState({count: this.state.count + result.movement});
+    }
+
+
     render() {
-        const questions = this.state.questions.map((question, index) =>
-            <li key={index}>{question}</li>
+        const tweets = this.state.tweets.map((tweet, index) =>
+            <li key={index}>
+                <img src={tweet.img} />
+                {tweet.text}
+                {tweet.created_at}
+            </li>
         );
 
         return (
-            <ul className="question-list">
-                {questions}
-            </ul>
+            <div>
+                <ul className="question-list">
+                    {tweets}
+
+                </ul>
+
+                <Websocket url='ws://localhost:8080' 
+                    onMessage={this.handleData.bind(this)} />
+            </div>
         );
     }
 }

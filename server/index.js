@@ -3,8 +3,12 @@ const express = require('express');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const BearerStrategy = require('passport-http-bearer').Strategy;
+const Twit  = require('twit')
+const configAuth = require('./config/auth')
 
-const secret = require('./secret');
+
+
+const secret = "ftvtLzywLJ2DInWS_d_1P9n-"
 
 const app = express();
 
@@ -15,7 +19,7 @@ app.use(passport.initialize());
 
 passport.use(
     new GoogleStrategy({
-        clientID:  '689026946763-rtsrhg52nra9oai4tk7gb05fs8f1t43l.apps.googleusercontent.com',
+        clientID:  '510905071248-bhcu7le33dpdsikvgih5nioivq6lor4l.apps.googleusercontent.com',
         clientSecret: secret,
         callbackURL: `/api/auth/google/callback`
     },
@@ -75,8 +79,105 @@ app.get('/api/me',
 
 app.get('/api/questions',
     passport.authenticate('bearer', {session: false}),
-    (req, res) => res.json(['Question 1', 'Question 2'])
+    (req, res) => res.json(['Question 1', 'Question 56'])
 );
+
+
+
+
+
+
+
+const T = new Twit({
+    consumer_key: configAuth.twitterAuth.consumerKey,
+    consumer_secret: configAuth.twitterAuth.consumerSecret,
+    access_token: configAuth.twitterAuth.access_token,
+    access_token_secret: configAuth.twitterAuth.access_token_secret,
+}); 
+
+
+
+
+
+
+
+
+
+
+
+app.get('/api/twitter', (req, res) => {
+    // send back data from Twitter
+        T.get('search/tweets', 
+                { q: 'NBA since:2017-1-11', count: 1000, filter: 'native_video' }, 
+                function(err, data, response) {
+                    // send back an array of objects that contain the profile
+                    // img url and tweet_status
+                    const tweets = data.statuses.map(function(tweet){
+                        // console.log(tweet.user.profile_image_url_https)
+                        // console.log(tweet.text)
+                        const retTweet = {
+                            img: tweet.user.profile_image_url_https,
+                            text: tweet.text,
+                            created: tweet.created_at
+
+                        }
+                        return retTweet
+                    })
+
+                    // const tweets = data.statuses.map(function(tweet){
+                    //     if(tweet.entities.media) {
+                    //         console.log(tweet.entities.media[0])    
+                    //     }
+                        
+                    // })
+                // console.log(data)
+                res.send(tweets)
+            })
+
+
+})
+
+
+
+// T.get('search/tweets', 
+//         { q: 'NBA since:2017-1-11', count: 1000, filter: 'native_video' }, 
+//         function(err, data, response) {
+//             // send back an array of objects that contain the profile
+//             // img url and tweet_status
+//             // const tweets = data.statuses.map(function(tweet){
+//             //     // console.log(tweet.user.profile_image_url_https)
+//             //     // console.log(tweet.text)
+//             //     const retTweet = {
+//             //         img: tweet.user.profile_image_url_https,
+//             //         text: tweet.text
+//             //     }
+//             //     return retTweet
+//             // })
+
+//             data.statuses.map(function(tweet){
+//                 // if(tweet.entities.media) {
+//                     console.log(tweet)
+//                     // console.log(tweet.entities.media[0])    
+//                 // }
+                
+//             })
+            
+//         // res.send(tweets)
+//     })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Serve the built client
 app.use(express.static(path.resolve(__dirname, '../client/build')));
@@ -107,6 +208,8 @@ function closeServer() {
         });
     });
 }
+
+
 
 if (require.main === module) {
     runServer();

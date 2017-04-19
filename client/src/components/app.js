@@ -1,8 +1,11 @@
 import React from 'react';
 import * as Cookies from 'js-cookie';
 
-import QuestionPage from './question-page';
+import TweetPage from './tweet-page';
 import LoginPage from './login-page';
+import CardContainer from './card'
+import Navigation from './navigation'
+
 
 class App extends React.Component {
     constructor(props) {
@@ -15,6 +18,7 @@ class App extends React.Component {
     componentDidMount() {
         // Job 4: Redux-ify all of the state and fetch calls to async actions.
         const accessToken = Cookies.get('accessToken');
+        console.log("accessToken", accessToken)
         if (accessToken) {
             fetch('/api/me', {
                 headers: {
@@ -28,23 +32,32 @@ class App extends React.Component {
                         Cookies.remove('accessToken');
                         return;
                     }
-                    throw new Error(res.statusText);
+                    throw new Error("ERROR!!", res.statusText);
                 }
                 return res.json();
-            }).then(currentUser =>
-                this.setState({
-                    currentUser
-                })
+            }).then(currentUser => {
+                console.log("CURRENT USER", currentUser)
+                    this.setState({
+                        currentUser
+                    })
+                }
             );
         }
     }
 
     render() {
+
         if (!this.state.currentUser) {
             return <LoginPage />;
         }
 
-        return <QuestionPage />;
+        return(
+            //container
+            <div className="app-container">
+                <Navigation />
+                <TweetPage />
+            </div>
+            )
     }
 }
 

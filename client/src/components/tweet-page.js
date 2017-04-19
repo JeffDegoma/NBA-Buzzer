@@ -1,6 +1,8 @@
 import React from 'react';
 import * as Cookies from 'js-cookie';
 import Websocket from 'react-websocket';
+import {Row, Col, Card, CardTitle} from 'react-materialize';
+
 
 
 
@@ -31,7 +33,6 @@ export default class TweetPage extends React.Component {
             })
         );
 
-        
     }
 
      handleData(data) {
@@ -41,22 +42,25 @@ export default class TweetPage extends React.Component {
 
 
     render() {
-        
-
+        //an array of what comes back from our Twitter call
         const tweets = this.state.tweets.map((tweet, index) =>
-            <li key={index}>
-                <img src={tweet.img} />
-                {tweet.text}
-                
-            </li>
+
+            //just add a regular card
+            <Row>
+                <Col m={6} className='grid-example'>
+                    <Card className='large'
+                        header={<CardTitle image={tweet.img}></CardTitle>}
+                        title={tweet.text}>
+                    </Card>
+                </Col>
+            </Row>
         );
 
         return (
-         
-                <ul className="question-list">
-                    {tweets}
 
-                </ul>
+                <div className="tweet-list">
+                    {tweets}
+                </div>
                 // <Websocket url='ws://localhost:8080' 
                 //     onMessage={this.handleData.bind(this)} />
        

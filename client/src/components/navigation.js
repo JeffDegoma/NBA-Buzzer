@@ -7,7 +7,6 @@ export default function Navigation() {
 
 	<Navbar brand='logo' right>
   		<NavItem href='get-started.html'>Getting started</NavItem>
-  		<NavItem href='components.html'>Components</NavItem>
 	</Navbar>
     
      )

@@ -25,10 +25,10 @@ else {
 
     app.listen(process.env.PORT || 8080);
 
-    const wss = new WebSocketServer({server: app})
+    const ws = new WebSocketServer({server: app})
     console.log("websocket server created")
 
-    wss.on("connection", function(ws) {
+    ws.on("connection", function(ws) {
       var id = setInterval(function() {
         ws.send(JSON.stringify(new Date()), function() {  })
       }, 1000)

@@ -3,51 +3,41 @@ const express = require('express');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const BearerStrategy = require('passport-http-bearer').Strategy;
+const TwitterStrategy = require('passport-twitter').Strategy;
 const Twit  = require('twit')
 const configAuth = require('./config/auth')
+const mongoose = require('mongoose')
+const session = require('express-session');
 
 
+const configDB = require('./config/database.js')
 
-const secret = "ftvtLzywLJ2DInWS_d_1P9n-"
+mongoose.connect(configDB.url)
+mongoose.Promise = global.Promise
+
+require('./config/passport')(passport)
+
+
 
 const app = express();
 
-const database = {
-};
-
+app.use(session({secret: 'ilovescotchscotchyschotch', resave: true, saveUninitialized: true}));
 app.use(passport.initialize());
+app.use(passport.session());
 
-passport.use(
-    new GoogleStrategy({
-        clientID:  '510905071248-bhcu7le33dpdsikvgih5nioivq6lor4l.apps.googleusercontent.com',
-        clientSecret: secret,
-        callbackURL: `/api/auth/google/callback`
-    },
-    (accessToken, refreshToken, profile, cb) => {
-        // Job 1: Set up Mongo/Mongoose, create a User model which store the
-        // google id, and the access token
-        // Job 2: Update this callback to either update or create the user
-        // so it contains the correct access token
-        const user = database[accessToken] = {
-            googleId: profile.id,
-            accessToken: accessToken
-        };
-        return cb(null, user);
+app.get('/api/auth/twitter', passport.authenticate('twitter'))
+
+//handle callback after twitter has authenticated the user
+app.get('/api/auth/twitter/callback',
+    passport.authenticate('twitter', {
+        failureRedirect: '/',
+        session: false
+    }),
+    (req, res) => {
+        console.log("TOKEN", req.user.accessToken)
+        res.cookie('accessToken', req.user.accessToken, {expires: 0});
+        res.redirect('/');
     }
-));
-
-passport.use(
-    new BearerStrategy(
-        (token, done) => {
-            // Job 3: Update this callback to try to find a user with a 
-            // matching access token.  If they exist, let em in, if not,
-            // don't.
-            if (!(token in database)) {
-                return done(null, false);
-            }
-            return done(null, database[token]);
-        }
-    )
 );
 
 app.get('/api/auth/google',
@@ -70,23 +60,13 @@ app.get('/api/auth/logout', (req, res) => {
     res.redirect('/');
 });
 
-app.get('/api/me',
-    passport.authenticate('bearer', {session: false}),
-    (req, res) => res.json({
-        googleId: req.user.googleId
-    })
+app.get('/api/me', passport.authenticate('bearer', {session: false}), (req, res) => {
+        console.log("USER", req.user)
+        res.json({
+            user: req.user
+        })
+    }
 );
-
-app.get('/api/questions',
-    passport.authenticate('bearer', {session: false}),
-    (req, res) => res.json(['Question 1', 'Question 56'])
-);
-
-
-
-
-
-
 
 const T = new Twit({
     consumer_key: configAuth.twitterAuth.consumerKey,
@@ -95,28 +75,22 @@ const T = new Twit({
     access_token_secret: configAuth.twitterAuth.access_token_secret,
 }); 
 
-
-
-
-
-
-
-
-
-
-
 app.get('/api/twitter', (req, res) => {
     // send back data from Twitter
         T.get('search/tweets', 
-                { q: 'NBA since:2017-1-11', count: 1000, filter: 'native_video' }, 
+                { q: 'NBA since:2017-1-11', count: 10 }, 
                 function(err, data, response) {
                     // send back an array of objects that contain the profile
                     // img url and tweet_status
-                    const tweets = data.statuses.map(function(tweet){
+                    let tweets = data.statuses.map(function(tweet){
                         // console.log(tweet.user.profile_image_url_https)
-                        // console.log(tweet.text)
+                        let TwitterImageUrl= tweet.user.profile_image_url_https
+                        let imageUrl = TwitterImageUrl.replace('_normal' , '')
+                        console.log(imageUrl)
+                        
+
                         const retTweet = {
-                            img: tweet.user.profile_image_url_https,
+                            img: imageUrl,
                             text: tweet.text,
                             created: tweet.created_at
 
@@ -134,8 +108,8 @@ app.get('/api/twitter', (req, res) => {
                 res.send(tweets)
             })
 
-
 })
+
 
 
 
@@ -164,17 +138,6 @@ app.get('/api/twitter', (req, res) => {
             
 //         // res.send(tweets)
 //     })
-
-
-
-
-
-
-
-
-
-
-
 
 
 

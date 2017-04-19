@@ -13,7 +13,6 @@ export default function LoginPage() {
      	<Navbar brand='logo' className="nav-extended nav-full-header" right>
   			<NavItem href={'/api/auth/google'}>Login with Google</NavItem>
   			<NavItem href={'/api/auth/twitter'}>Login with Twitter</NavItem>
-  			<NavItem href='components.html'>Components</NavItem>
 		</Navbar>
      	 <img src="//cdn.shopify.com/s/files/1/1775/8583/t/1/assets/cityscape-line1.png?12295265317662713736" alt="cityscape"/>
 	

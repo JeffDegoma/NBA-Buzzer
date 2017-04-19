@@ -6,7 +6,7 @@ export default function Navigation() {
 	return(
 
 	<Navbar brand='logo' right>
-  		<NavItem href='get-started.html'>Getting started</NavItem>
+  		<NavItem href='/api/auth/logout'>Log Out</NavItem>
 	</Navbar>
     
      )

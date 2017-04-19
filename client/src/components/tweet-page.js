@@ -47,7 +47,7 @@ export default class TweetPage extends React.Component {
 
             //just add a regular card
             <Row>
-                <Col m={6} className='grid-example'>
+                <Col s={6} m={6} className='grid-example'>
                     <Card className='large'
                         header={<CardTitle image={tweet.img}></CardTitle>}
                         title={tweet.text}>

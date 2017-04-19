@@ -3,7 +3,6 @@ import * as Cookies from 'js-cookie';
 
 import TweetPage from './tweet-page';
 import LoginPage from './login-page';
-import CardContainer from './card'
 import Navigation from './navigation'
 
 

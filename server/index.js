@@ -84,6 +84,7 @@ app.get('/api/twitter', (req, res) => {
                     // img url and tweet_status
                     let tweets = data.statuses.map(function(tweet){
                         // console.log(tweet.user.profile_image_url_https)
+                        console.log(tweet)
                         let TwitterImageUrl= tweet.user.profile_image_url_https
                         let imageUrl = TwitterImageUrl.replace('_normal' , '')
                         console.log(imageUrl)
@@ -92,7 +93,8 @@ app.get('/api/twitter', (req, res) => {
                         const retTweet = {
                             img: imageUrl,
                             text: tweet.text,
-                            created: tweet.created_at
+                            created: tweet.created_at,
+                            tweetID: tweet.id_str
 
                         }
                         return retTweet
@@ -110,7 +112,13 @@ app.get('/api/twitter', (req, res) => {
 
 })
 
+const stream = T.stream('statuses/filter', { track: 'NBA' })
 
+stream.on('tweet', function (tweet) {  
+  // console.log(tweet.user.screen_name)
+  // get websockets going
+  // send out to front end
+})
 
 
 // T.get('search/tweets', 

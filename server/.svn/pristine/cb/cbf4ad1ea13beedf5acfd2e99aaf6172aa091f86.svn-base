@@ -1,0 +1,15 @@
+const mongoose = require('mongoose')
+
+
+const userSchema = mongoose.Schema({
+	
+twitter:{
+		id: String,
+		token: String,
+		displayName: String,
+		username: String
+	}
+})
+
+
+module.exports = mongoose.model('User', userSchema)

@@ -4,15 +4,19 @@ const passport = require('passport');
 const TwitterStrategy = require('passport-twitter').Strategy
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const BearerStrategy = require('passport-http-bearer').Strategy;
+const Twit  = require('twit')
 const User = require('./models/user');
 
 const configAuth = require('./auth')
 const app = express();
 
 
+const secret = "ftvtLzywLJ2DInWS_d_1P9n-"
 
 
-const database = {}
+const database = {
+
+}
 
 module.exports = function(passport){
 
@@ -70,9 +74,9 @@ module.exports = function(passport){
 
 passport.use(
     new GoogleStrategy({
-        clientID:  configAuth.googleAuth.clientID,
-        clientSecret: configAuth.googleAuth.clientSecret,
-        callbackURL: configAuth.googleAuth.callbackURL
+        clientID:  '510905071248-bhcu7le33dpdsikvgih5nioivq6lor4l.apps.googleusercontent.com',
+        clientSecret: secret,
+        callbackURL: `/api/auth/google/callback`
     },
     (accessToken, refreshToken, profile, cb) => {
         // Job 1: Set up Mongo/Mongoose, create a User model which store the
@@ -103,4 +107,18 @@ passport.use(
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
 }

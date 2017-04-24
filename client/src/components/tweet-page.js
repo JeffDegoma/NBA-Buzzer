@@ -50,8 +50,8 @@ export default class TweetPage extends React.Component {
         const tweets = this.state.tweets.map((tweet, index) => 
             //just add a regular card
             
-            <Col  s={4} m={4} className='grid-example'>
-                <Card className='small'
+            <Col  s={8} m={3} className='grid-example'>
+                <Card className='medium tweet-card'
                     header={<CardTitle reveal image={tweet.img}></CardTitle>}
                     reveal={<Tweet tweetId={tweet.tweetID} />}>
                     {tweet.text}

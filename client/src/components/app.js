@@ -17,7 +17,6 @@ class App extends React.Component {
     componentDidMount() {
         // Job 4: Redux-ify all of the state and fetch calls to async actions.
         const accessToken = Cookies.get('accessToken');
-        console.log("accessToken", accessToken)
         if (accessToken) {
             fetch('/api/me', {
                 headers: {
@@ -35,7 +34,6 @@ class App extends React.Component {
                 }
                 return res.json();
             }).then(currentUser => {
-                console.log("CURRENT USER", currentUser)
                     this.setState({
                         currentUser
                     })
@@ -55,8 +53,9 @@ class App extends React.Component {
             <div className="app-container">
                 <Navigation />
                 <TweetPage />
+                
             </div>
-            )
+        )
     }
 }
 

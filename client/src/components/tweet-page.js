@@ -1,20 +1,22 @@
 import React from 'react';
 import * as Cookies from 'js-cookie';
-import Websocket from 'react-websocket';
-import {Row, Col, Card, Chip, CardTitle} from 'react-materialize';
+import {Row, Col, Card, CardTitle, Button} from 'react-materialize';
 import { Tweet } from 'react-twitter-widgets'
 
+import {connect} from 'react-redux';
 
-// const socket = io();
+import * as actions from '../actions/index';
 
 
-export default class TweetPage extends React.Component {
+
+class TweetPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            questions: [],
-            tweets: []
+            tweets: [],
         };
+        this.saveTweet = this.saveTweet.bind(this)
+
     }
 
     componentDidMount() {
@@ -24,25 +26,24 @@ export default class TweetPage extends React.Component {
                     'Authorization': `Bearer ${accessToken}`
                 }
             }).then(res => {
-            if (!res.ok) {
-                throw new Error(res.statusText);
-            }
-            return res.json();
-        }).then(tweets => {
-            console.log(tweets)
-            this.setState({
-                tweets
+                if (!res.ok) {
+                    throw new Error(res.statusText);
+                }
+                    return res.json();
+            }).then(tweets => {
+                this.setState({
+                    tweets
             })
             }
         );
 
     }
 
-    handleData(data) {
-        console.log("data", data)
-        // socket.on('message', (tweet) => console.log(tweet));
-      // this.setState({count: this.state.count + result.movement});
+    saveTweet(tweetID){
+        console.log(tweetID)  
+        this.props.dispatch(actions.saveToFavorites(tweetID))      
     }
+    
 
 
     render() {
@@ -50,11 +51,14 @@ export default class TweetPage extends React.Component {
         const tweets = this.state.tweets.map((tweet, index) => 
             //just add a regular card
             
-            <Col  s={8} m={3} className='grid-example'>
+            <Col key={index} s={8} m={3} className='grid-example'>
                 <Card className='medium tweet-card'
                     header={<CardTitle reveal image={tweet.img}></CardTitle>}
                     reveal={<Tweet tweetId={tweet.tweetID} />}>
-                    {tweet.text}
+                    {tweet.text} <br />
+                    <Button floating className='red' waves='light' icon='add' 
+                        onClick={this.saveTweet.bind(null, tweet.tweetID)}
+                    />
                 </Card>
             </Col>
             
@@ -73,3 +77,5 @@ export default class TweetPage extends React.Component {
         );
     }
 }
+
+export default connect()(TweetPage);

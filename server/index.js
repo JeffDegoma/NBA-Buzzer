@@ -8,6 +8,7 @@ const Twit  = require('twit')
 const configAuth = require('./config/auth')
 const mongoose = require('mongoose')
 const session = require('express-session');
+const bodyParser = require('body-parser')
 
 
 const configDB = require('./config/database.js')
@@ -19,7 +20,12 @@ require('./config/passport')(passport)
 
 
 
+
 const app = express();
+
+app.use(bodyParser.urlencoded({ extended: true })); 
+app.use(bodyParser.json());
+
 
 app.use(session({secret: 'ilovescotchscotchyschotch', resave: true, saveUninitialized: true}));
 app.use(passport.initialize());
@@ -68,6 +74,13 @@ app.get('/api/me', passport.authenticate('bearer', {session: false}), (req, res)
     }
 );
 
+
+//set up route
+app.post('/api/favorites/save', (req,res)=>{
+    console.log(req)
+    res.sendStatus(200)
+})
+
 const T = new Twit({
     consumer_key: configAuth.twitterAuth.consumerKey,
     consumer_secret: configAuth.twitterAuth.consumerSecret,
@@ -83,11 +96,8 @@ app.get('/api/twitter', (req, res) => {
                     // send back an array of objects that contain the profile
                     // img url and tweet_status
                     let tweets = data.statuses.map(function(tweet){
-                        // console.log(tweet.user.profile_image_url_https)
-                        console.log(tweet)
                         let TwitterImageUrl= tweet.user.profile_image_url_https
                         let imageUrl = TwitterImageUrl.replace('_normal' , '')
-                        console.log(imageUrl)
                         
 
                         const retTweet = {
@@ -112,40 +122,15 @@ app.get('/api/twitter', (req, res) => {
 
 })
 
-const stream = T.stream('statuses/filter', { track: 'NBA' })
+// const stream = T.stream('statuses/filter', { track: 'NBA' })
 
-stream.on('tweet', function (tweet) {  
-  // console.log(tweet.user.screen_name)
-  // get websockets going
-  // send out to front end
-})
+// stream.on('tweet', function (tweet) {  
+//   // console.log(tweet.user.screen_name)
+//   // get websockets going
+//   // send out to front end
+// })
 
 
-// T.get('search/tweets', 
-//         { q: 'NBA since:2017-1-11', count: 1000, filter: 'native_video' }, 
-//         function(err, data, response) {
-//             // send back an array of objects that contain the profile
-//             // img url and tweet_status
-//             // const tweets = data.statuses.map(function(tweet){
-//             //     // console.log(tweet.user.profile_image_url_https)
-//             //     // console.log(tweet.text)
-//             //     const retTweet = {
-//             //         img: tweet.user.profile_image_url_https,
-//             //         text: tweet.text
-//             //     }
-//             //     return retTweet
-//             // })
-
-//             data.statuses.map(function(tweet){
-//                 // if(tweet.entities.media) {
-//                     console.log(tweet)
-//                     // console.log(tweet.entities.media[0])    
-//                 // }
-                
-//             })
-            
-//         // res.send(tweets)
-//     })
 
 
 

@@ -81,7 +81,7 @@ const T = new Twit({
 app.get('/api/twitter', (req, res) => {
         // send back data from Twitter
         T.get('search/tweets', 
-            { q: 'NBA since:2017-1-11', count: 12 }, 
+            { q: 'NBA since:2017-1-11', count: 15 }, 
                 function(err, data, response) {
                     // send back an array of objects that contain the profile
                     // img url and tweet_status

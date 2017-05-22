@@ -1,9 +1,11 @@
 import React from 'react';
 import * as Cookies from 'js-cookie';
 
+
+
 import TweetPage from './tweet-page';
 import LoginPage from './login-page';
-import Navigation from './navigation'
+import Navigation from './navigation';
 
 
 class App extends React.Component {
@@ -16,7 +18,7 @@ class App extends React.Component {
 
     componentDidMount() {
         // Job 4: Redux-ify all of the state and fetch calls to async actions.
-        const accessToken = Cookies.get('accessToken');
+        const accessToken = Cookies.get('accessToken')
         if (accessToken) {
             fetch('/api/me', {
                 headers: {
@@ -53,7 +55,7 @@ class App extends React.Component {
             <div className="app-container">
                 <Navigation />
                 <TweetPage />
-                
+                {this.props.children}
             </div>
         )
     }

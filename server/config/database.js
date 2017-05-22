@@ -1,3 +1,3 @@
 module.exports = {
-	'url': 'mongodb://oauth:oauth@ds137730.mlab.com:37730/auth-practice'
+	'url': 'mongodb://twitterUser:twitterUser@ds133281.mlab.com:33281/nba-twitter'
 }

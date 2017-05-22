@@ -1,10 +1,14 @@
+require('dotenv').config();
 const express = require('express');
 const proxy = require('http-proxy-middleware');
-const WebSocketServer = require("ws").Server
+
 
 
 const app = express();
 const runServer = require('./server').runServer;
+
+console.log(process.env.CONSUMER_KEY)
+console.log("ENV", process.env.NODE_ENV)
 
 if (process.env.NODE_ENV === 'production') {
     // Just run the server
@@ -25,20 +29,6 @@ else {
 
     app.listen(process.env.PORT || 8080);
 
-    const ws = new WebSocketServer({server: app})
-    console.log("websocket server created")
-
-    ws.on("connection", function(ws) {
-      var id = setInterval(function() {
-        ws.send(JSON.stringify(new Date()), function() {  })
-      }, 1000)
-
-      console.log("websocket connection open")
-
-      ws.on("close", function() {
-        console.log("websocket connection close")
-        clearInterval(id)
-      })
-    })
+  
 
 }

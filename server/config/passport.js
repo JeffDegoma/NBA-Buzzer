@@ -2,19 +2,34 @@
 const express = require('express');
 const passport = require('passport');
 const TwitterStrategy = require('passport-twitter').Strategy
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const BearerStrategy = require('passport-http-bearer').Strategy;
+
+
+
+
+//load user model
 const User = require('./models/user');
 
+
+//load auth module
 const configAuth = require('./auth')
-const app = express();
 
 
 
-
-const database = {}
 
 module.exports = function(passport){
+
+    //serialize
+    passport.serializeUser(function(user,done){
+        done(null, user.id)
+    })
+
+    //deserialize
+    passport.deserializeUser(function(id,done){
+        User.findById(id,function(err,user){
+            done(err,user)
+        })
+    })
 
 	passport.use(
 		new TwitterStrategy({
@@ -24,83 +39,69 @@ module.exports = function(passport){
 
     },
 
-    function(accessToken, refreshToken, profile, cb){
-    	console.log("HELLLLLLLLOOOOO")
+    (accessToken, refreshToken, profile, done) => {
     	// make the code asynchronous
     	// User.findOne won't fire until we have all our data back from Twitter
-    	const user = database[accessToken] = {
-            twitterId: profile.id,
-            accessToken: accessToken
-        };
-		console.log("USER", user)
+  //   	const user = database[accessToken] = {
+  //           twitterId: profile.id,
+  //           accessToken: accessToken
+  //       };
+		// console.log("USER", user)
 
-        return cb(null, user);
 
-    	// process.nextTick(function(){
+    	process.nextTick(function(){
 
-    	// 	User.findOne({'twitter.id' : profile.id}, function(err, user){
-    	// 		// if there is an error, stop everything and return that
-     //            // ie an error connecting to the database
-     //            if (err)
-     //                return done(err);
+            User.findOne({'twitter.id' : profile.id}, function(err, user){
+                // if there is an error, stop everything and return that
+                // ie an error connecting to the database
+                if (err)
+                    return done(err);
 
-     //            if(user){
-     //            	return done(null, user)
-     //            }else{
-     //            	const newUser = new User();
+                if(user){
+                    return done(null, user)
+                }else{
+                    const newUser = new User();
 
-     //            	//set all data we need from schema
-     //            	newUser.twitter.id          = profile.id;
-     //                newUser.twitter.token       = token;
-     //                newUser.twitter.username    = profile.username;
-     //                newUser.twitter.displayName = profile.displayName;
+                    //set all data we need from schema
+                    newUser.twitter.id          = profile.id;
+                    newUser.twitter.accessToken = accessToken;
+                    newUser.twitter.username    = profile.username;
+                    newUser.twitter.displayName = profile.displayName;
+                    newUser.twitter.favorites   = [];
 
-     //            	newUser.save(function(err){
-     //            		if(err)
-     //            			throw err
+                    newUser.save(function(err){
+                        if(err)
+                            throw err
 
-     //            		return done(null, newUser)
-     //            	})
+                        return done(null, newUser)
+                    })
 
-     //            }
-    	// 	})
-    	// })
+                }
+            })
+        })
 
     }))
 
-passport.use(
-    new GoogleStrategy({
-        clientID:  configAuth.googleAuth.clientID,
-        clientSecret: configAuth.googleAuth.clientSecret,
-        callbackURL: configAuth.googleAuth.callbackURL
-    },
-    (accessToken, refreshToken, profile, cb) => {
-        // Job 1: Set up Mongo/Mongoose, create a User model which store the
-        // google id, and the access token
-        // Job 2: Update this callback to either update or create the user
-        // so it contains the correct access token
-        const user = database[accessToken] = {
-            googleId: profile.id,
-            accessToken: accessToken
-        };
-        return cb(null, user);
-    }
-));
+
 
 passport.use(
     new BearerStrategy(
-        (token, done) => {
-            // Job 3: Update this callback to try to find a user with a 
-            // matching access token.  If they exist, let em in, if not,
-            // don't.
-            if (!(token in database)) {
-                return done(null, false);
-            }
-            return done(null, database[token]);
+        function(accessToken, done) {
+            User.findOne({'twitter.accessToken' : accessToken },
+                function(err, user) {
+                    if(err) {
+                        return done(err)
+                    }
+                    if(!user) {
+                        return done(null, false)
+                    }
+
+                    return done(null, user, { scope: 'all' })
+                }
+            );
         }
     )
 );
-
 
 
 }

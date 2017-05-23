@@ -1,10 +1,9 @@
 import React from 'react';
-import {Row, Col, Card, CardTitle, Button, Toast} from 'react-materialize';
-import { Tweet } from 'react-twitter-widgets'
+import { Row, Col, Card, CardTitle, Button, Toast } from 'react-materialize';
+import { Tweet } from 'react-twitter-widgets';
 import Navigation from './navigation';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import * as actions from '../actions/index';
-
 import PageFooter from './page-footer';
 
 
@@ -12,15 +11,15 @@ class FavoritesPage extends React.Component {
     
     constructor(props) {
         super(props);
-        this.deleteTweet = this.deleteTweet.bind(this)
+        this.deleteTweet = this.deleteTweet.bind(this);
     }
 
     componentDidMount() {
-		this.props.dispatch(actions.fetchFavoriteTweets())
+		this.props.dispatch(actions.fetchFavoriteTweets());
 	}
 
 	deleteTweet(tweet){
-        this.props.dispatch(actions.deleteFromFavorites(tweet))      
+        this.props.dispatch(actions.deleteFromFavorites(tweet));   
     }
 
 	render() {
@@ -35,13 +34,16 @@ class FavoritesPage extends React.Component {
                             {tweet.text} 
                             <br />
                             <Toast toast="Deleted!">
-                                <Button floating className='red' waves='light' icon='delete' 
+                                <Button floating 
+                                        className='red' 
+                                        waves='light' 
+                                        icon='delete' 
                                         onClick={this.deleteTweet.bind(null, tweet)}
                                 />
                             </Toast>
                         </Card>
                     </Col>
-                )
+                );
         });
         
 
@@ -55,10 +57,7 @@ class FavoritesPage extends React.Component {
             </div>
         );
     }
-
 }
-
-
 
 const mapStateToProps = (state, props) => ({
     tweets: state.savedTweets

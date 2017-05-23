@@ -1,9 +1,8 @@
-const mongoose = require('mongoose')
-
+const mongoose = require('mongoose');
 
 const userSchema = mongoose.Schema({
 	
-twitter:{
+	twitter: {
 		id: String,
 		accessToken: String,
 		displayName: String,
@@ -11,15 +10,12 @@ twitter:{
 		favorites: Array
 	},
 
-	google:{
+	google: {
 		id: String,
 		accessToken: String,
 		email: String,
 		name: String,
 	}
+});
 
-})
-
-
-
-module.exports = mongoose.model('User', userSchema)
+module.exports = mongoose.model('User', userSchema);

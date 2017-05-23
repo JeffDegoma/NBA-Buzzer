@@ -76,6 +76,15 @@ body {
 }
 
 
+footer.page-footer{
+  background-color: #757a8a;
+  padding-top: 12px;
+}
+
+.app-container .row{
+  margin-bottom: 30px;
+}
+
 
 
 

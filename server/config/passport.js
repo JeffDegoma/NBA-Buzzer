@@ -6,7 +6,6 @@ const BearerStrategy = require('passport-http-bearer').Strategy;
 
 
 
-
 //load user model
 const User = require('./models/user');
 
@@ -42,12 +41,6 @@ module.exports = function(passport){
     (accessToken, refreshToken, profile, done) => {
     	// make the code asynchronous
     	// User.findOne won't fire until we have all our data back from Twitter
-  //   	const user = database[accessToken] = {
-  //           twitterId: profile.id,
-  //           accessToken: accessToken
-  //       };
-		// console.log("USER", user)
-
 
     	process.nextTick(function(){
 
@@ -56,7 +49,6 @@ module.exports = function(passport){
                 // ie an error connecting to the database
                 if (err)
                     return done(err);
-
                 if(user){
                     return done(null, user)
                 }else{

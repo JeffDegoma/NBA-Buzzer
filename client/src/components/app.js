@@ -6,6 +6,7 @@ import * as Cookies from 'js-cookie';
 import TweetPage from './tweet-page';
 import LoginPage from './login-page';
 import Navigation from './navigation';
+import PageFooter from './page-footer'
 
 
 class App extends React.Component {
@@ -54,8 +55,8 @@ class App extends React.Component {
             //container
             <div className="app-container">
                 <Navigation />
-                <TweetPage />
-                {this.props.children}
+                    <TweetPage />
+                <PageFooter />
             </div>
         )
     }

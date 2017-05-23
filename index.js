@@ -7,11 +7,10 @@ const proxy = require('http-proxy-middleware');
 const app = express();
 const runServer = require('./server').runServer;
 
-console.log(process.env.CONSUMER_KEY)
-console.log("ENV", process.env.NODE_ENV)
 
 if (process.env.NODE_ENV === 'production') {
     // Just run the server
+
     runServer(process.env.PORT || 8080);
 }
 else {

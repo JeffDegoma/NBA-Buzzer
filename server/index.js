@@ -19,7 +19,7 @@ mongoose.Promise = global.Promise
 
 
 
-//Twitter and Google Login
+//Twitter Login
 require('./config/passport')(passport)
 
 
@@ -38,6 +38,8 @@ app.use(passport.session());
 
 
 
+// ----------------------Routes-----------------------//
+
 //Twitter Authenticate
 app.get('/api/auth/twitter', passport.authenticate('twitter'), (req, res, next, err) => {
 })
@@ -55,12 +57,6 @@ app.get('/api/auth/twitter/callback',
 
 
 
-app.get('/api/auth/logout', (req, res) => {
-    req.logout();
-    res.clearCookie('accessToken');
-    res.redirect('/');
-});
-
 app.get('/api/me', passport.authenticate('bearer', { session: false }),(req, res) => {
         res.json({
             user: req.user
@@ -68,6 +64,11 @@ app.get('/api/me', passport.authenticate('bearer', { session: false }),(req, res
     }
 );
 
+app.get('/api/auth/logout', (req, res) => {
+    req.logout();
+    res.clearCookie('accessToken');
+    res.redirect('/');
+});
 
 
 //Search NBA Tweets
@@ -99,7 +100,7 @@ app.get('/api/twitter', (req, res) => {
                         return retTweet
                     })
                     res.send(tweets)
-                })
+        })
 })
 
 
@@ -132,8 +133,8 @@ app.post('/api/favorites/save', passport.authenticate('bearer', {session: false}
 //favorites page
 app.get('/api/favorites', passport.authenticate('bearer', {session: false}),(req,res)=>{
     const userID = req.user.twitter.id
-    User.findOne({'twitter.id': userID}, ((err, user)=> {
 
+    User.findOne({'twitter.id': userID}, ((err, user)=> {
         if(err){
             console.log("Something wrong when updating data!");
         }

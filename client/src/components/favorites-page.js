@@ -5,6 +5,9 @@ import Navigation from './navigation';
 import {connect} from 'react-redux';
 import * as actions from '../actions/index';
 
+import PageFooter from './page-footer';
+
+
 class FavoritesPage extends React.Component {
     
     constructor(props) {
@@ -45,9 +48,10 @@ class FavoritesPage extends React.Component {
         return (
   			<div className="app-container">
                 <Navigation />
-                <Row>
-                  {favorites}
-                </Row>
+                    <Row>
+                      {favorites}
+                    </Row>
+                <PageFooter />
             </div>
         );
     }

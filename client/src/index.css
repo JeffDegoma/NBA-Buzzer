@@ -59,8 +59,10 @@ body {
 footer.page-footer {
   background-color: #757a8a;
   padding-top: 12px;
+  margin-top: 80px;
 }
 
 .app-container .row {
   margin-bottom: 30px;
+  margin-top: 25px;
 }

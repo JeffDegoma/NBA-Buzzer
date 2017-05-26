@@ -3,7 +3,8 @@ import * as actions from '../actions/index';
 
 const nbaState = {
 	savedTweets: [],
-	twitterTweets: []
+	twitterTweets: [],
+	twitterUsers: null
 }
 
 export const nbaStateReducer = (state = nbaState, action) => {
@@ -36,6 +37,15 @@ export const nbaStateReducer = (state = nbaState, action) => {
 		const tweets = action.tweets;
 		state.twitterTweets = [...tweets];
 		return Object.assign({}, state);
+	}
+
+	if(action.type === actions.GET_USERS) {
+		const users = action.users;
+		state.twitterUsers = [...users];
+		return {
+			...state,
+			twitterUsers: users
+		}
 	}
 
 	return state;

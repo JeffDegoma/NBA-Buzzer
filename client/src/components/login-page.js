@@ -1,6 +1,6 @@
 import React from 'react';
 import { Navbar, NavItem } from 'react-materialize';
-
+import DemoLogin from './demo-login';
 
 
 export default function LoginPage() {
@@ -14,6 +14,7 @@ export default function LoginPage() {
 	        			href={'/api/auth/twitter'}>
 	        				Login with Twitter
 	        		</NavItem>
+	        		<DemoLogin />
 	        	</div>
 			</Navbar>
 		</div>

@@ -27,6 +27,13 @@ export const getSeededTweets = tweets => ({
     tweets
 });
 
+export const GET_USERS = 'GET_USERS';
+export const getUsers = users => ({
+    type: GET_USERS,
+    users
+});
+
+
 export const saveToFavorites = tweet => dispatch => {
 
     const url = '/api/favorites/save';
@@ -137,4 +144,90 @@ export const fetchSeedTweets = () => dispatch => {
     .catch(error => {
         console.log(error);
     });
+
 }
+
+export const fetchUsers = () => dispatch => {
+
+    const url = '/api/me';
+    const accessToken = Cookies.get('accessToken')
+
+    if (accessToken) {
+        return fetch(url, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            }
+        })
+        .then(res => {
+            if (!res.ok) {
+                if (res.status !== 401) {
+                    // Unauthorized, clear the cookie and go to
+                    // the login page
+                    Cookies.remove('accessToken');
+                    return;
+                }
+                throw new Error("ERROR!!", res.statusText);
+            }
+            return res.json();
+        })
+        .then(currentUser => {
+           dispatch(getUsers(currentUser))
+        })
+        .catch(error => {
+        console.log(error);
+        });
+    }
+}
+
+
+export const modalLogin = (username, password) => dispatch => {
+    const url = '/signup/me';
+    const user = {username, password}
+    const accessToken = Cookies.get('accessToken');
+
+    console.log(user)
+    return fetch(url, {
+        method: "GET",
+        // body: JSON.stringify(user),
+        headers: {
+            'Authorization': `Bearer ${accessToken}`
+        }
+    })
+    .then(res => {
+        if (!res.ok) {
+            if (res.status !== 401) {
+                // Unauthorized, clear the cookie and go to
+                // the login page
+                Cookies.remove('accessToken');
+                return;
+            }
+            throw new Error("ERROR!!", res.statusText);
+        }
+        console.log("RESSSSS", res)
+        return res.json();
+    })
+    .then(currentUser => {
+        console.log("FETCH", currentUser)
+        dispatch(getUsers(currentUser))
+    })
+    .catch(error => {
+        console.log(error);
+    });
+
+}
+
+
+//dispatch a fetch to an api to connect to 'login endpoint'
+
+
+
+
+
+
+
+
+
+
+
+
+

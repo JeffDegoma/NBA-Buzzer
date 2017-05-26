@@ -1,5 +1,6 @@
 const express = require('express');
 const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
 const TwitterStrategy = require('passport-twitter').Strategy;
 const BearerStrategy = require('passport-http-bearer').Strategy;
 
@@ -24,6 +25,85 @@ module.exports = function(passport) {
         });
     });
 
+
+
+    //local signup
+    passport.use('local-signup', new LocalStrategy({
+        // by default, local strategy uses username and password, we will override with email
+        usernameField : 'email',
+        passwordField : 'password',
+        passReqToCallback : true // allows us to pass back the entire request to the callback
+    },
+
+    //
+    function(req, email, password, done) {
+        console.log("SINGUPPP!!!")
+        //asychronous
+        //User.findOne won't fire unless data is sent back
+        process.nextTick(function(){
+            //find a user whose email is the same as the forms email
+            //we are checking to see if the user trying to login already exists
+            User.findOne({'local.email': email},function(err,user) {
+                console.log("USER SIGNUP", user);
+
+                if(err)
+                    return done(err);
+
+                if(user){
+                    return done(null,false,req.flash('signupMessage', 'That email is already taken.'));
+                }else{
+                    const newUser = new User();
+                    newUser.local.email = email;
+                    console.log(newUser);
+                    newUser.local.password = newUser.generateHash(password);
+
+                    newUser.save(function(err){
+                        if(err)
+                            throw err;
+
+                        return done(null, newUser);
+                    });
+                }
+
+            });
+        });
+
+    }));
+
+    //Local Login
+    passport.use('local-login', new LocalStrategy({
+
+        usernameField: 'email',
+        passwordField: 'password',
+        passReqToCallback: true
+        },
+
+        function(req, email, password, done) {
+
+            //find a user in the database whose email is the same in the form email
+            User.findOne({'local.email': email}, function(err, user) {
+                
+                console.log("USER LOGIN", user);
+                if(err)
+                    return done(err);
+
+            //if user doesn't exist return flash message
+                if(!user)
+                    return done(null, false, req.flash('loginMessge', 'No user found'));
+            
+            //check to see if user is found but the password is wrong
+                if(!user.validPassword(password))
+                    return done(null,false, req.flash('loginMessage', 'Oops! Wrong password.'));
+        
+                return done(null, user);
+
+            });
+
+        }));
+
+
+
+    //Twitter Login
 	passport.use(
 		new TwitterStrategy({
         	consumerKey     : configAuth.twitterAuth.consumerKey,
@@ -70,8 +150,12 @@ module.exports = function(passport) {
     passport.use(
         new BearerStrategy(
             function(accessToken, done) {
-                User.findOne({'twitter.accessToken' : accessToken },
-                    function(err, user) {
+                User.find({
+                    "$or": [
+                        {'twitter.accessToken' : accessToken },
+                        {'local.accessToken' : accessToken }
+                    ]
+                    },function(err, user) {
                         if(err) {
                             return done(err);
                         }

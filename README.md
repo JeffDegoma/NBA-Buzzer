@@ -1,6 +1,6 @@
 # NBA Buzzer
 # Install
-	> git clone https://github.com/JeffDegoma/nba-twitter.git
+	> git clone https://github.com/JeffDegoma/NBA-Buzzer.git
 	> npm i
 # Launching
 	> npm run dev

@@ -181,34 +181,32 @@ export const fetchUsers = () => dispatch => {
 
 
 export const modalLogin = (username, password) => dispatch => {
-    const url = '/signup/me';
+    const url = '/api/signup/me';
     const user = {username, password}
-    const accessToken = Cookies.get('accessToken');
 
-    console.log(user)
     return fetch(url, {
-        method: "GET",
-        // body: JSON.stringify(user),
+        method: "POST",
         headers: {
-            'Authorization': `Bearer ${accessToken}`
-        }
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+        }, 
+        body: JSON.stringify(user)
     })
     .then(res => {
         if (!res.ok) {
             if (res.status !== 401) {
-                // Unauthorized, clear the cookie and go to
-                // the login page
-                Cookies.remove('accessToken');
-                return;
+                const error = new Error(res.statusText);
+                error.res = res;
+                throw error;
             }
             throw new Error("ERROR!!", res.statusText);
         }
-        console.log("RESSSSS", res)
-        return res.json();
+        console.log("inside modal login",res)
+        return JSON.stringify(res)
     })
     .then(currentUser => {
         console.log("FETCH", currentUser)
-        dispatch(getUsers(currentUser))
+        // dispatch(getUsers(currentUser))
     })
     .catch(error => {
         console.log(error);

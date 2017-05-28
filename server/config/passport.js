@@ -150,11 +150,8 @@ module.exports = function(passport) {
     passport.use(
         new BearerStrategy(
             function(accessToken, done) {
-                User.find({
-                    "$or": [
-                        {'twitter.accessToken' : accessToken },
-                        {'local.accessToken' : accessToken }
-                    ]
+                User.findOne({
+                        'twitter.accessToken' : accessToken 
                     },function(err, user) {
                         if(err) {
                             return done(err);

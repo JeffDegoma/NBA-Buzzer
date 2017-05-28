@@ -1,9 +1,9 @@
-// require('dotenv').config();
 const path = require('path');
 const express = require('express');
 const passport = require('passport');
 const BearerStrategy = require('passport-http-bearer').Strategy;
 const TwitterStrategy = require('passport-twitter').Strategy;
+const LocalStrategy = require('passport-local').Strategy;
 const Twit  = require('twit')
 const configAuth = require('./config/auth')
 const mongoose = require('mongoose')
@@ -41,26 +41,17 @@ app.use(passport.session());
 // ----------------------Routes-----------------------//
 
 
-// passport.authenticate('local-signup', {
-//         successRedirect : '/', // redirect to the secure profile section
-//         failureRedirect : '/', // redirect back to the signup page if there is an error
-//         failureFlash : true // allow flash messages
-// })
-
 
 //Local Route======================
 
-app.post('/signup', (req, res) => {
-    res.json({hello: 'put'})
-    console.log("HELLLLOOOO", req.body)
-});
 
-app.get('/signup/me', (req, res) => {
-    console.log('hello GET ROUTE')
-    res.json({hello: 'get'})
-    
+app.post('/api/signup/me', passport.authenticate('local-signup', {
+    successRedirect : '/', // redirect to the secure profile section
+    failureRedirect : '/' // redirect back to the signup page if there is an error
+}), (req, res)=>{
+    console.log('REQ', req.body)
+    res.sendStatus(200)
 })
-
 // app.post('/login', 
 //     passport.authenticate('bearer', { session: false }),(req, res) => {
 //         res.cookie('accessToken', req.user.twitter.accessToken, {expires: 0});
@@ -89,7 +80,7 @@ app.get('/api/me', passport.authenticate('bearer', { session: false }),(req, res
         res.json({
             user: req.user
         })
-    });
+});
 
 app.get('/api/auth/logout', (req, res) => {
     req.logout();
@@ -225,5 +216,5 @@ if (require.main === module) {
 }
 
 module.exports = {
-    app, runServer, closeServer
+    app, passport, runServer, closeServer
 };

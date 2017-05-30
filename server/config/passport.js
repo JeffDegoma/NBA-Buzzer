@@ -26,7 +26,6 @@ module.exports = function(passport) {
     });
 
 
-
     //local signup
     passport.use('local-signup', new LocalStrategy({
         // by default, local strategy uses username and password, we will override with email
@@ -37,7 +36,7 @@ module.exports = function(passport) {
 
     //
     function(req, email, password, done) {
-        console.log("SINGUPPP!!!")
+        console.log('inside local signup')
         //asychronous
         //User.findOne won't fire unless data is sent back
         process.nextTick(function(){
@@ -50,11 +49,11 @@ module.exports = function(passport) {
                     return done(err);
 
                 if(user){
-                    return done(null,false,req.flash('signupMessage', 'That email is already taken.'));
+                    return done(null,false);
                 }else{
                     const newUser = new User();
                     newUser.local.email = email;
-                    console.log(newUser);
+                    console.log("inside signup strategy", newUser);
                     newUser.local.password = newUser.generateHash(password);
 
                     newUser.save(function(err){
@@ -66,8 +65,7 @@ module.exports = function(passport) {
                 }
 
             });
-        });
-
+        })
     }));
 
     //Local Login
@@ -83,18 +81,19 @@ module.exports = function(passport) {
             //find a user in the database whose email is the same in the form email
             User.findOne({'local.email': email}, function(err, user) {
                 
-                console.log("USER LOGIN", user);
                 if(err)
                     return done(err);
 
             //if user doesn't exist return flash message
                 if(!user)
-                    return done(null, false, req.flash('loginMessge', 'No user found'));
+                    return done(null, false);
             
             //check to see if user is found but the password is wrong
                 if(!user.validPassword(password))
-                    return done(null,false, req.flash('loginMessage', 'Oops! Wrong password.'));
-        
+                    return done(null,false);
+
+                // console.log("logged in user", user)
+
                 return done(null, user);
 
             });
@@ -150,9 +149,14 @@ module.exports = function(passport) {
     passport.use(
         new BearerStrategy(
             function(accessToken, done) {
+                
                 User.findOne({
-                        'twitter.accessToken' : accessToken 
-                    },function(err, user) {
+                    $or:[ 
+                        {'local.email' : accessToken}, {'twitter.accessToken': accessToken}
+                    ]}, 
+                    function(err, user) {
+                        console.log("inside mongoose find one", accessToken)
+
                         if(err) {
                             return done(err);
                         }

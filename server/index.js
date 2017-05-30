@@ -45,25 +45,34 @@ app.use(passport.session());
 //Local Route======================
 
 
-app.post('/api/signup/me', passport.authenticate('local-signup', {
-    successRedirect : '/', // redirect to the secure profile section
-    failureRedirect : '/' // redirect back to the signup page if there is an error
-}), (req, res)=>{
-    console.log('REQ', req.body)
-    res.sendStatus(200)
-})
-// app.post('/login', 
-//     passport.authenticate('bearer', { session: false }),(req, res) => {
-//         res.cookie('accessToken', req.user.twitter.accessToken, {expires: 0});
-//         res.json({
-//             user: req.user
-//         })  
-//     });
+app.post('/api/login/me', function(req, res, next) {
+  // generate the authenticate method and pass the req/res
+  passport.authenticate('local-login', function(err, user, info) {
+    if (err) { return next(err); }
+    if (!user) { return res.redirect('/'); }
+
+    // req / res held in closure
+    req.logIn(user, function(err) {
+    if (err) { return next(err); }
+        res.cookie('accessToken', req.user.local.email, {maxAge: 2592000000});
+    return res.send(user);
+    });
+
+  })(req, res, next);
+
+});
+
+// app.post('/api/signup/me', passport.authenticate('local-login', {
+//     successRedirect : '/', // redirect to the secure profile section
+//     failureRedirect : '/', // redirect back to the signup page if there is an error
+// }))
+
+
+
 
 //Twitter Authenticate
 app.get('/api/auth/twitter', passport.authenticate('twitter'), (req, res, next, err) => {
 })
-
 //handle callback after twitter has authenticated the user
 app.get('/api/auth/twitter/callback',
     passport.authenticate('twitter', {
@@ -77,9 +86,9 @@ app.get('/api/auth/twitter/callback',
 
 
 app.get('/api/me', passport.authenticate('bearer', { session: false }),(req, res) => {
-        res.json({
-            user: req.user
-        })
+    res.json({
+        user: req.user
+    })
 });
 
 app.get('/api/auth/logout', (req, res) => {
@@ -170,9 +179,7 @@ app.delete('/api/favorites/delete', passport.authenticate('bearer', {session: fa
             if(err){
                  console.log("ERROR INSIDE DELETE",err);
             }
-
             res.status(201).json(user.twitter.favorites)
-
         }))
 })
 

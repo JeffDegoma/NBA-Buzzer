@@ -152,6 +152,7 @@ export const fetchUsers = () => dispatch => {
     const url = '/api/me';
     const accessToken = Cookies.get('accessToken')
 
+
     if (accessToken) {
         return fetch(url, {
             headers: {
@@ -180,9 +181,10 @@ export const fetchUsers = () => dispatch => {
 }
 
 
-export const modalLogin = (username, password) => dispatch => {
-    const url = '/api/signup/me';
-    const user = {username, password}
+export const modalLogin = (email, password) => dispatch => {
+
+    const url = '/api/login/me';
+    const user = {email, password}
 
     return fetch(url, {
         method: "POST",
@@ -202,30 +204,18 @@ export const modalLogin = (username, password) => dispatch => {
             throw new Error("ERROR!!", res.statusText);
         }
         console.log("inside modal login",res)
-        return JSON.stringify(res)
+        return res.json()
+
     })
     .then(currentUser => {
         console.log("FETCH", currentUser)
-        // dispatch(getUsers(currentUser))
+        Cookies.set('accessToken', currentUser.local.email);
+        dispatch(getUsers(currentUser))
     })
     .catch(error => {
         console.log(error);
     });
 
 }
-
-
-//dispatch a fetch to an api to connect to 'login endpoint'
-
-
-
-
-
-
-
-
-
-
-
 
 

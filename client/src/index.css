@@ -6,6 +6,15 @@ body {
   font-family: 'sans-serif';
 }
 
+ body {
+   display: flex;
+   min-height: 100vh;
+   flex-direction: column;
+ }
+ main {
+     flex: 1 0 auto;
+ }
+
 .tweet-card i.right {
 	margin-top: -10px;
 }
@@ -33,21 +42,43 @@ body {
 
 .nav-background {
   background-image: url(https://images.unsplash.com/photo-1469155472021-fb3489e556fb?dpr=2&amp);
-  background-size:cover;
-  width: 100%;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-attachment: fixed;
+  background-size: cover;
   height: 900px;
 }
 
+/*twitter button*/
 .social-links a {
   color: #b0bec5;
-  font-size: 1.2em;
+  font-size: 1.0em;
   position:relative;
   z-index:2;
-  margin:0 auto;
-  top:135px;
+  top: 120px;
   list-style-type:none;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  text-transform: uppercase;
 }
 
+/*demo============*/
+.btn.social-links{
+  background-color: transparent;
+  color: #b0bec5;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  margin-left: 10px;
+}
+
+.btn.social-links:hover {
+  background-color: #cfd8dc;
+  color: white;
+}
+
+/*on the login page*/
 .nav-container {
   position: absolute;
   left: 60%;
@@ -59,10 +90,16 @@ body {
 footer.page-footer {
   background-color: #757a8a;
   padding-top: 12px;
-  margin-top: 80px;
 }
 
 .app-container .row {
   margin-bottom: 30px;
   margin-top: 25px;
 }
+
+nav ul a:hover{
+  background-color: #cfd8dc;
+  border-radius: 2px;
+  color: white;
+}
+

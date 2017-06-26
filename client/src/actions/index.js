@@ -27,10 +27,10 @@ export const getSeededTweets = tweets => ({
     tweets
 });
 
-export const GET_USERS = 'GET_USERS';
-export const getUsers = users => ({
-    type: GET_USERS,
-    users
+export const GET_USER = 'GET_USER';
+export const getUser = user => ({
+    type: GET_USER,
+    user
 });
 
 
@@ -55,8 +55,9 @@ export const saveToFavorites = tweet => dispatch => {
         }
         return response.json();
     })
-    .then(data => {
-        dispatch(saveTweet(data));
+    .then(tweets => {
+        console.log("Saved tweets!", tweets)
+        dispatch(saveTweet(tweets));
     })
     .catch(error => {
         console.log(error);
@@ -147,7 +148,7 @@ export const fetchSeedTweets = () => dispatch => {
 
 }
 
-export const fetchUsers = () => dispatch => {
+export const fetchUser = () => dispatch => {
 
     const url = '/api/me';
     const accessToken = Cookies.get('accessToken')
@@ -172,11 +173,13 @@ export const fetchUsers = () => dispatch => {
             return res.json();
         })
         .then(currentUser => {
-           dispatch(getUsers(currentUser))
+           dispatch(getUser(currentUser))
         })
         .catch(error => {
         console.log(error);
         });
+    }else{
+        dispatch(getUser(null))
     }
 }
 
@@ -203,14 +206,12 @@ export const modalLogin = (email, password) => dispatch => {
             }
             throw new Error("ERROR!!", res.statusText);
         }
-        console.log("inside modal login",res)
         return res.json()
-
     })
     .then(currentUser => {
         console.log("FETCH", currentUser)
         Cookies.set('accessToken', currentUser.local.email);
-        dispatch(getUsers(currentUser))
+        dispatch(getUser(currentUser))
     })
     .catch(error => {
         console.log(error);

@@ -4,7 +4,7 @@ import * as actions from '../actions/index';
 const nbaState = {
 	savedTweets: [],
 	twitterTweets: [],
-	twitterUsers: null
+	twitterUser: {}
 }
 
 export const nbaStateReducer = (state = nbaState, action) => {
@@ -39,12 +39,12 @@ export const nbaStateReducer = (state = nbaState, action) => {
 		return Object.assign({}, state);
 	}
 
-	if(action.type === actions.GET_USERS) {
-		const users = action.users;
-		state.twitterUsers = [...users];
+	if(action.type === actions.GET_USER) {
+		const user = action.user;
+		// state.twitterUsers = [...users];
 		return {
 			...state,
-			twitterUsers: users
+			twitterUser: user
 		}
 	}
 

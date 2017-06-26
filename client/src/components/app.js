@@ -11,18 +11,18 @@ import * as actions from '../actions/index';
 class App extends React.Component {
 
     componentDidMount() {
-        this.props.dispatch(actions.fetchUsers())
+        this.props.dispatch(actions.fetchUser())
     }
 
     render() {
-        if (!this.props.users) {
+        if (!this.props.user) {
             return <LoginPage />;
         }
 
         return (
             <div className="app-container">
-                <Navigation />
-                    <TweetPage />
+                <Navigation favorites={this.props.favorites} />
+                <TweetPage />
                 <PageFooter />
             </div>
         )
@@ -30,7 +30,8 @@ class App extends React.Component {
 }
 
 const mapStateToProps = (state, props) => ({
-    users: state.twitterUsers
+    user: state.twitterUser,
+    favorites: state.savedTweets
 });
 
 export default connect(mapStateToProps)(App)

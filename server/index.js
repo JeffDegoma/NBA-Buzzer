@@ -18,10 +18,8 @@ mongoose.connect(configDB.url)
 mongoose.Promise = global.Promise
 
 
-
 //Twitter Login
 require('./config/passport')(passport)
-
 
 
 const app = express();
@@ -36,41 +34,27 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 
-
-
 // ----------------------Routes-----------------------//
 
 
-
 //Local Route======================
-
-
 app.post('/api/login/me', function(req, res, next) {
-  // generate the authenticate method and pass the req/res
-  passport.authenticate('local-login', function(err, user, info) {
-    if (err) { return next(err); }
-    if (!user) { return res.redirect('/'); }
-
+    // generate the authenticate method and pass the req/res
+    passport.authenticate('local-login', function(err, user, info) {
+        if (err) { return next(err); }
+        if (!user) { return res.redirect('/'); }
     // req / res held in closure
     req.logIn(user, function(err) {
     if (err) { return next(err); }
         res.cookie('accessToken', req.user.local.email, {maxAge: 2592000000});
     return res.send(user);
     });
-
   })(req, res, next);
 
 });
 
-// app.post('/api/signup/me', passport.authenticate('local-login', {
-//     successRedirect : '/', // redirect to the secure profile section
-//     failureRedirect : '/', // redirect back to the signup page if there is an error
-// }))
 
-
-
-
-//Twitter Authenticate
+//Twitter Authenticate==========================
 app.get('/api/auth/twitter', passport.authenticate('twitter'), (req, res, next, err) => {
 })
 //handle callback after twitter has authenticated the user
@@ -82,7 +66,6 @@ app.get('/api/auth/twitter/callback',
         res.cookie('accessToken', req.user.twitter.accessToken, {expires: 0});
         res.redirect('/');
     });
-
 
 
 app.get('/api/me', passport.authenticate('bearer', { session: false }),(req, res) => {
@@ -117,7 +100,6 @@ app.get('/api/twitter', (req, res) => {
                         let TwitterImageUrl= tweet.user.profile_image_url_https
                         let imageUrl = TwitterImageUrl.replace('_normal' , '')
                         
-
                         const retTweet = {
                             img: imageUrl,
                             text: tweet.text,
@@ -131,21 +113,18 @@ app.get('/api/twitter', (req, res) => {
 })
 
 
-
-
-
 //Route to save tweets into database
 app.post('/api/favorites/save', passport.authenticate('bearer', {session: false}), (req,res)=>{
     const tweet = req.body
-    const userID = req.user.twitter.id
+
+    console.log("tweet from favorites/save", req.user)
 
     //find by userID
-    User.findOne({'twitter.id': userID}, ((err, user)=> {
+    User.findById(req.user._id, ((err, user)=> {
         let favorites = user.twitter.favorites
             if(err){
                 console.log("Something wrong when updating data!");
             }
-
         favorites.push(tweet)
 
         user.markModified('twitter.favorites')
@@ -172,18 +151,16 @@ app.get('/api/favorites', passport.authenticate('bearer', {session: false}),(req
 
 //delete favorite
 app.delete('/api/favorites/delete', passport.authenticate('bearer', {session: false}), (req,res)=>{
-        const tweetID = req.body.tweet.tweetID
-        const userID = req.user.twitter.id
+    const tweetID = req.body.tweet.tweetID
+    const userID = req.user.twitter.id
 
-        User.findOneAndUpdate({'twitter.id': userID}, {$pull: {'twitter.favorites': {'tweet.tweetID': tweetID}}}, {new:true}, ((err, user)=> {
-            if(err){
-                 console.log("ERROR INSIDE DELETE",err);
-            }
-            res.status(201).json(user.twitter.favorites)
-        }))
+    User.findOneAndUpdate({'twitter.id': userID}, {$pull: {'twitter.favorites': {'tweet.tweetID': tweetID}}}, {new:true}, ((err, user)=> {
+        if(err){
+             console.log("ERROR INSIDE DELETE",err);
+        }
+        res.status(201).json(user.twitter.favorites)
+    }))
 })
-
-
 
 
 // Serve the built client
@@ -215,7 +192,6 @@ function closeServer() {
         });
     });
 }
-
 
 
 if (require.main === module) {

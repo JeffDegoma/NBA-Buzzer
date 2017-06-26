@@ -23,7 +23,8 @@ class FavoritesPage extends React.Component {
     }
 
 	render() {
-        let favorites = this.props.tweets.map((data, index) => {
+        const noFavorites = 'You have not added a tweet!'
+        const favorites = this.props.tweets.map((data, index) => {
             const tweet = data.tweet
                 
                 return (
@@ -45,14 +46,15 @@ class FavoritesPage extends React.Component {
                     </Col>
                 );
         });
-        
 
         return (
-  			<div className="app-container">
-                <Navigation />
+            <div className="app-container">
+  			   <Navigation favorites={this.props.favorites}/>
+                <main>
                     <Row>
-                      {favorites}
+                      {this.props.favorites.length ? favorites : <div className="no-favorites">{noFavorites}</div>}
                     </Row>
+                </main>
                 <PageFooter />
             </div>
         );
@@ -60,7 +62,8 @@ class FavoritesPage extends React.Component {
 }
 
 const mapStateToProps = (state, props) => ({
-    tweets: state.savedTweets
+    tweets: state.savedTweets,
+    favorites: state.savedTweets
 });
 
 export default connect(mapStateToProps)(FavoritesPage);

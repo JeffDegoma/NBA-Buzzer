@@ -39,11 +39,13 @@ class TweetPage extends React.Component {
         );
 
         return (
-            <div className="tweet-list">
-                <Row>
-                    {tweets}
-                </Row>
-            </div>
+            <main>  
+                <div className="tweet-list">
+                    <Row>
+                        {tweets}
+                    </Row>
+                </div>
+            </main>
         );
     }
 }

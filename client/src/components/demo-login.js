@@ -15,7 +15,6 @@ class DemoLogin extends React.Component {
 		const userPassword = this.password.props.value
 
 		this.props.dispatch(actions.modalLogin(userEmail, userPassword))
-		
 	}
 
 	render() {
@@ -24,12 +23,12 @@ class DemoLogin extends React.Component {
 				header='NBA Buzzer Demo'
 				trigger={
 					<Button className="social-links" 
-						waves='light'>View Demo
+						>View Demo
 					</Button>}
 				actions={
 				    <div>
-				      <Button modal="close" waves="light" className="darken-2">Cancel</Button>
-				      <Button onClick={this.getUserCreds} flat waves="light">Login</Button>
+				      <Button modal="close" flat waves="light" className="darken-2">Cancel</Button>
+				      <Button modal="close" onClick={this.getUserCreds} flat waves="light">Login</Button>
 				    </div>
 				}>
 				<Row>
@@ -37,6 +36,7 @@ class DemoLogin extends React.Component {
 				    	type="email" 
 				    	label="Email" 
 				    	s={12} 
+				    	name="email" 
 				    	value="abc@email.com" 
 				    	ref={(ref) => { this.email = ref; }} />
 

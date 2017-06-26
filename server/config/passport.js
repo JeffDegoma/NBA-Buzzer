@@ -53,7 +53,6 @@ module.exports = function(passport) {
                 }else{
                     const newUser = new User();
                     newUser.local.email = email;
-                    console.log("inside signup strategy", newUser);
                     newUser.local.password = newUser.generateHash(password);
 
                     newUser.save(function(err){
@@ -80,22 +79,18 @@ module.exports = function(passport) {
 
             //find a user in the database whose email is the same in the form email
             User.findOne({'local.email': email}, function(err, user) {
-                
                 if(err)
                     return done(err);
-
             //if user doesn't exist return flash message
                 if(!user)
-                    return done(null, false);
-            
+                    return done(null, false);    
             //check to see if user is found but the password is wrong
                 if(!user.validPassword(password))
                     return done(null,false);
 
-                // console.log("logged in user", user)
+                console.log("logged in user", user)
 
                 return done(null, user);
-
             });
 
         }));
@@ -155,7 +150,7 @@ module.exports = function(passport) {
                         {'local.email' : accessToken}, {'twitter.accessToken': accessToken}
                     ]}, 
                     function(err, user) {
-                        console.log("inside mongoose find one", accessToken)
+                        console.log("inside bearer strategy", accessToken)
 
                         if(err) {
                             return done(err);

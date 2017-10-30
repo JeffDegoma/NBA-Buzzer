@@ -29,6 +29,13 @@ class DemoLogin extends React.Component {
 				    <div>
 				      <Button modal="close" flat waves="light" className="darken-2">Cancel</Button>
 				      <Button modal="close" onClick={this.getUserCreds} flat waves="light">Login</Button>
+	    		className="modal"
+				header='NBA Buzzer Demo'
+				trigger={<Button className="cta-btn">View Demo</Button>}
+				actions={
+				    <div className="button-conditional-container">
+				      <Button modal="close" onClick={this.getUserCreds} className="cta-btn" flat waves="light">Login</Button>
+				      <Button modal="close" flat waves="light" className="cta-btn">Cancel</Button>
 				    </div>
 				}>
 				<Row>

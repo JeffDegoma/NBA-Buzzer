@@ -24,6 +24,7 @@ class FavoritesPage extends React.Component {
 
 	render() {
         const noFavorites = 'You have not added a tweet!'
+        const noFavorites = 'Whoops, try adding a tweet :)'
         const favorites = this.props.tweets.map((data, index) => {
             const tweet = data.tweet
                 
@@ -53,6 +54,7 @@ class FavoritesPage extends React.Component {
                 <main>
                     <Row>
                       {this.props.favorites.length ? favorites : <div className="no-favorites">{noFavorites}</div>}
+                      {this.props.favorites.length ? favorites : <div className="no-favorites-div"><h3 className="no-favorites">{noFavorites}</h3></div>}
                     </Row>
                 </main>
                 <PageFooter />

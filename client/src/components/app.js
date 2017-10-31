@@ -20,7 +20,7 @@ class App extends React.Component {
         }
 
         return (
-            <div className="app-container">
+            <div>
                 <Navigation favorites={this.props.favorites} />
                 <TweetPage />
                 <PageFooter />

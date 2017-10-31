@@ -1,25 +1,36 @@
 @import url('https://fonts.googleapis.com/css?family=Quattrocento+Sans');
 
-body {
+body, html {
   margin: 0;
   padding: 0;
   font-family: 'sans-serif';
-  display: flex;
   height: 100%;
   flex-direction: column;
 }
 
- 
- main {
+#root {
+  height: 100%
+}
+/* main {
      flex: 1 0 auto;
  }
-
+*/
 .intro {
-  height: 100%;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100%;
   background-image: url(https://images.unsplash.com/photo-1504450758481-7338eba7524a?auto=format&fit=crop&w=2849&q=60&ixid=dW5zcGxhc2guY29tOzs7Ozs%3D);
   background-size: cover;
   background-position: center;
 }
+
+.cta {
+  display: flex;
+  margin: auto;
+  flex-direction: column
+}
+
 
 .tweet-card i.right {
 	margin-top: -10px;

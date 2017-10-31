@@ -4,16 +4,22 @@ body {
   margin: 0;
   padding: 0;
   font-family: 'sans-serif';
+  display: flex;
+  height: 100%;
+  flex-direction: column;
 }
 
- body {
-   display: flex;
-   min-height: 100vh;
-   flex-direction: column;
- }
+ 
  main {
      flex: 1 0 auto;
  }
+
+.intro {
+  height: 100%;
+  background-image: url(https://images.unsplash.com/photo-1504450758481-7338eba7524a?auto=format&fit=crop&w=2849&q=60&ixid=dW5zcGxhc2guY29tOzs7Ozs%3D);
+  background-size: cover;
+  background-position: center;
+}
 
 .tweet-card i.right {
 	margin-top: -10px;
@@ -40,17 +46,9 @@ body {
   font-family: 'Quattrocento Sans';
 }
 
-.nav-background {
-  background-image: url(https://images.unsplash.com/photo-1469155472021-fb3489e556fb?dpr=2&amp);
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-attachment: fixed;
-  background-size: cover;
-  height: 900px;
-}
 
 /*twitter button*/
-.social-links a {
+/*.social-links a {
   color: #b0bec5;
   font-size: 1.0em;
   position:relative;
@@ -61,10 +59,10 @@ body {
   -moz-box-shadow: none;
   box-shadow: none;
   text-transform: uppercase;
-}
+}*/
 
 /*demo============*/
-.btn.social-links{
+/*.btn.social-links{
   background-color: transparent;
   color: #b0bec5;
   -webkit-box-shadow: none;
@@ -76,16 +74,9 @@ body {
 .btn.social-links:hover {
   background-color: #cfd8dc;
   color: white;
-}
+}*/
 
 /*on the login page*/
-.nav-container {
-  position: absolute;
-  left: 60%;
-  margin-left: -100px;
-  margin-top: 10%;
-  width: 200px;
-}
 
 footer.page-footer {
   background-color: #757a8a;

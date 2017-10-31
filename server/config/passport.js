@@ -12,29 +12,20 @@ const configAuth = require('./auth')
 
 
 module.exports = function(passport) {
-<<<<<<< Updated upstream
 
-=======
->>>>>>> Stashed changes
     //serialize
     passport.serializeUser(function(user, done) {
         done(null, user.id);
     });
-<<<<<<< Updated upstream
 
-=======
->>>>>>> Stashed changes
     //deserialize
     passport.deserializeUser(function(id, done) {
         User.findById(id, function(err, user) {
             done(err, user);
         });
     });
-<<<<<<< Updated upstream
 
 
-=======
->>>>>>> Stashed changes
     //local signup
     passport.use('local-signup', new LocalStrategy({
         // by default, local strategy uses username and password, we will override with email
@@ -43,24 +34,17 @@ module.exports = function(passport) {
         passReqToCallback : true // allows us to pass back the entire request to the callback
     },
 
-<<<<<<< Updated upstream
     //
     function(req, email, password, done) {
         console.log('inside local signup')
-=======
-    function(req, email, password, done) {
->>>>>>> Stashed changes
         //asychronous
         //User.findOne won't fire unless data is sent back
         process.nextTick(function(){
             //find a user whose email is the same as the forms email
             //we are checking to see if the user trying to login already exists
             User.findOne({'local.email': email},function(err,user) {
-<<<<<<< Updated upstream
                 console.log("USER SIGNUP", user);
 
-=======
->>>>>>> Stashed changes
                 if(err)
                     return done(err);
 
@@ -85,20 +69,14 @@ module.exports = function(passport) {
 
     //Local Login
     passport.use('local-login', new LocalStrategy({
-<<<<<<< Updated upstream
 
-=======
->>>>>>> Stashed changes
         usernameField: 'email',
         passwordField: 'password',
         passReqToCallback: true
         },
 
         function(req, email, password, done) {
-<<<<<<< Updated upstream
 
-=======
->>>>>>> Stashed changes
             //find a user in the database whose email is the same in the form email
             User.findOne({'local.email': email}, function(err, user) {
                 if(err)
@@ -110,7 +88,6 @@ module.exports = function(passport) {
                 if(!user.validPassword(password))
                     return done(null,false);
 
-<<<<<<< Updated upstream
                 console.log("logged in user", user)
 
                 return done(null, user);
@@ -120,28 +97,19 @@ module.exports = function(passport) {
 
 
 
-=======
-                return done(null, user);
-            });
-        }));
-
->>>>>>> Stashed changes
     //Twitter Login
-	passport.use(
-		new TwitterStrategy({
-        	consumerKey     : configAuth.twitterAuth.consumerKey,
+    passport.use(
+        new TwitterStrategy({
+            consumerKey     : configAuth.twitterAuth.consumerKey,
             consumerSecret  : configAuth.twitterAuth.consumerSecret,
             callbackURL     : configAuth.twitterAuth.callbackURL
         },
 
         (accessToken, refreshToken, profile, done) => {
-        	// make the code asynchronous
-        	// User.findOne won't fire until we have all our data back from Twitter
-        	process.nextTick(function() {
-<<<<<<< Updated upstream
+            // make the code asynchronous
+            // User.findOne won't fire until we have all our data back from Twitter
+            process.nextTick(function() {
 
-=======
->>>>>>> Stashed changes
                 User.findOne({'twitter.id' : profile.id}, function(err, user) {
                     // if there is an error, stop everything and return that
                     // ie an error connecting to the database
@@ -172,27 +140,18 @@ module.exports = function(passport) {
         })
     );
 
-<<<<<<< Updated upstream
 
     passport.use(
         new BearerStrategy(
             function(accessToken, done) {
                 
-=======
-    passport.use(
-        new BearerStrategy(
-            function(accessToken, done) {
->>>>>>> Stashed changes
                 User.findOne({
                     $or:[ 
                         {'local.email' : accessToken}, {'twitter.accessToken': accessToken}
                     ]}, 
                     function(err, user) {
-<<<<<<< Updated upstream
                         console.log("inside bearer strategy", accessToken)
 
-=======
->>>>>>> Stashed changes
                         if(err) {
                             return done(err);
                         }
@@ -204,8 +163,5 @@ module.exports = function(passport) {
                 );
             })
         );
-<<<<<<< Updated upstream
     
-=======
->>>>>>> Stashed changes
 };

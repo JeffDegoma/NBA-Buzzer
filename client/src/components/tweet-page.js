@@ -31,7 +31,7 @@ class TweetPage extends React.Component {
                     <br />
                     <Toast toast="Saved to Favorites!">
                         <Button icon='add' floating className='red' 
-                                onClick={this.saveTweet.bind(null, tweet)} 
+                            onClick={this.saveTweet.bind(null, tweet)} 
                         />
                     </Toast>
                 </Card>

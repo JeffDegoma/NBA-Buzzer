@@ -56,7 +56,6 @@ export const saveToFavorites = tweet => dispatch => {
         return response.json();
     })
     .then(tweets => {
-        console.log("Saved tweets!", tweets)
         dispatch(saveTweet(tweets));
     })
     .catch(error => {
@@ -209,7 +208,6 @@ export const modalLogin = (email, password) => dispatch => {
         return res.json()
     })
     .then(currentUser => {
-        console.log("FETCH", currentUser)
         Cookies.set('accessToken', currentUser.local.email);
         dispatch(getUser(currentUser))
     })

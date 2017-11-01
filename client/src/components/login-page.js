@@ -29,25 +29,24 @@ class LoginPage extends React.Component {
 
 	render() {
 	    return (
-	    		<div className="intro">
-		     		<div className="cta">
-			     			<div className="cta-content">
-			        		<NavItem 
-			        			href={'/api/auth/twitter'}>
-			        				Login with Twitter
-			        		</NavItem>
-			        		</div>
-		        		<DemoLogin />
-		        	</div>
-		        		<div className="seconds"><span>{this.state.seconds}</span></div>
-				</div>
+    		<div className="intro">
+	     		<div className="cta">
+	        		<div className="shot-clock"><span>{this.state.seconds}</span></div>
+		     		<div className="cta-content">
+		        		<NavItem
+		        			className="cta-btn"
+		        			href={'/api/auth/twitter'}>
+		        				Login with Twitter
+		        		</NavItem>
+	        		<DemoLogin />
+	        		</div>
+	        	</div>
+			</div>
 		);
 	}
 }
 
 
 export default LoginPage;
-
-
 
 	

@@ -25,10 +25,10 @@ module.exports = function(passport) {
         });
     });
 
-
     //local signup
-    passport.use('local-signup', new LocalStrategy({
+    passport.use('local-signup', 
         // by default, local strategy uses username and password, we will override with email
+        new LocalStrategy({
         usernameField : 'email',
         passwordField : 'password',
         passReqToCallback : true // allows us to pass back the entire request to the callback
@@ -36,15 +36,12 @@ module.exports = function(passport) {
 
     //
     function(req, email, password, done) {
-        console.log('inside local signup')
         //asychronous
         //User.findOne won't fire unless data is sent back
         process.nextTick(function(){
             //find a user whose email is the same as the forms email
             //we are checking to see if the user trying to login already exists
             User.findOne({'local.email': email},function(err,user) {
-                console.log("USER SIGNUP", user);
-
                 if(err)
                     return done(err);
 
@@ -68,15 +65,13 @@ module.exports = function(passport) {
     }));
 
     //Local Login
-    passport.use('local-login', new LocalStrategy({
-
-        usernameField: 'email',
-        passwordField: 'password',
-        passReqToCallback: true
+    passport.use('local-login', 
+        new LocalStrategy({
+            usernameField: 'email',
+            passwordField: 'password',
+            passReqToCallback: true
         },
-
         function(req, email, password, done) {
-
             //find a user in the database whose email is the same in the form email
             User.findOne({'local.email': email}, function(err, user) {
                 if(err)
@@ -109,7 +104,6 @@ module.exports = function(passport) {
             // make the code asynchronous
             // User.findOne won't fire until we have all our data back from Twitter
             process.nextTick(function() {
-
                 User.findOne({'twitter.id' : profile.id}, function(err, user) {
                     // if there is an error, stop everything and return that
                     // ie an error connecting to the database
@@ -144,14 +138,11 @@ module.exports = function(passport) {
     passport.use(
         new BearerStrategy(
             function(accessToken, done) {
-                
                 User.findOne({
                     $or:[ 
                         {'local.email' : accessToken}, {'twitter.accessToken': accessToken}
                     ]}, 
                     function(err, user) {
-                        console.log("inside bearer strategy", accessToken)
-
                         if(err) {
                             return done(err);
                         }

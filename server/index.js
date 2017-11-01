@@ -17,13 +17,10 @@ const configDB = require('./config/database.js')
 mongoose.connect(configDB.url)
 mongoose.Promise = global.Promise
 
-
 //Twitter Login
 require('./config/passport')(passport)
 
-
 const app = express();
-
 
 app.use(bodyParser.urlencoded({ extended: true })); 
 app.use(bodyParser.json());
@@ -35,7 +32,6 @@ app.use(passport.session());
 
 
 // ----------------------Routes-----------------------//
-
 
 //Local Route======================
 app.post('/api/login/me', function(req, res, next) {
@@ -52,7 +48,6 @@ app.post('/api/login/me', function(req, res, next) {
   })(req, res, next);
 
 });
-
 
 //Twitter Authenticate==========================
 app.get('/api/auth/twitter', passport.authenticate('twitter'), (req, res, next, err) => {
@@ -79,7 +74,6 @@ app.get('/api/auth/logout', (req, res) => {
     res.clearCookie('accessToken');
     res.redirect('/');
 });
-
 
 //Search NBA Tweets
 const T = new Twit({
@@ -112,12 +106,9 @@ app.get('/api/twitter', (req, res) => {
         })
 })
 
-
 //Route to save tweets into database
 app.post('/api/favorites/save', passport.authenticate('bearer', {session: false}), (req,res)=>{
     const tweet = req.body
-
-    console.log("tweet from favorites/save", req.user)
 
     //find by userID
     User.findById(req.user._id, ((err, user)=> {
@@ -134,7 +125,6 @@ app.post('/api/favorites/save', passport.authenticate('bearer', {session: false}
 
     }));
 })
-
 
 //favorites page
 app.get('/api/favorites', passport.authenticate('bearer', {session: false}),(req,res)=>{

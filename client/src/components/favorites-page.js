@@ -48,9 +48,9 @@ class FavoritesPage extends React.Component {
         });
 
         return (
-            <div className="app-container">
+            <div className="favorites-container">
   			   <Navigation favorites={this.props.favorites}/>
-                <main>
+                <main className="favorites-content">
                     <Row>
                       {this.props.favorites.length ? favorites : <div className="no-favorites-div"><h3 className="no-favorites">{noFavorites}</h3></div>}
                     </Row>

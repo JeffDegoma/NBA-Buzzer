@@ -43,10 +43,7 @@ body, html {
     letter-spacing: .5px;
 }
 
-/*.cta > li:hover {
-  background-color: pink;
-}
-*/
+
 .cta-btn:hover {
   background-color: pink;
 }
@@ -143,14 +140,21 @@ nav .brand-logo {
 /*on the login page*/
 
 .footer-component {
+  flex: 1 0 0;
   background-color: #112F4B;
   padding-top: 12px;
   color: white;
 }
 
-.app-container .row {
-  margin-bottom: 30px;
-  margin-top: 25px;
+.favorites-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.favorites-content {
+  padding-top: 5%;
+  flex: 1;
 }
 
 nav ul a:hover{

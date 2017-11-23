@@ -8,8 +8,10 @@ const Twit  = require('twit')
 const configAuth = require('./config/auth')
 const mongoose = require('mongoose')
 const session = require('express-session');
-const bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
+const request = require('request')
 const User = require('./config/models/user');
+
 
 
 //database
@@ -75,6 +77,18 @@ app.get('/api/auth/logout', (req, res) => {
     res.redirect('/');
 });
 
+const urL = 'http://api.suredbits.com/nba/v0/games/phi/2017/11'
+request(urL, (error, response, body) => {
+        let teamInfo = JSON.parse(body)
+            teamInfo.map(function(team){
+                let gameId = team.gameId
+
+                console.log(gameId)
+            })
+            // console.log(teamInfo)
+        })
+
+
 //Search NBA Tweets
 const T = new Twit({
     consumer_key: configAuth.twitterAuth.consumerKey,
@@ -91,6 +105,7 @@ app.get('/api/twitter', (req, res) => {
                     // send back an array of objects that contain the profile
                     // img url and tweet_status
                     let tweets = data.statuses.map(function(tweet){
+                        console.log()
                         let TwitterImageUrl= tweet.user.profile_image_url_https
                         let imageUrl = TwitterImageUrl.replace('_normal' , '')
                         

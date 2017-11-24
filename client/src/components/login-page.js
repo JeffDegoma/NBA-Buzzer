@@ -8,10 +8,9 @@ class LoginPage extends React.Component {
 		super(props);
 		this.state = {
 			seconds:  5,
-			news: null
+			news: []
 		}
 		this.timer = this.timer.bind(this)
-		// this.recentNews = this.recentNews.bind(this)
 	}
 
 	timer() {
@@ -24,18 +23,18 @@ class LoginPage extends React.Component {
 	componentDidMount() {
 		this.interval = setInterval(this.timer, 1000)
 		var url = 'https://newsapi.org/v2/everything?' +
-          'q=Apple&' +
-          'from=2017-11-24&' +
-          'sortBy=popularity&' +
-          'apiKey=950b36bbafbe4e6592bd748b8d0d0b8b';
+			'domains=espn.com&' + 
+			'q=NBA&' +
+			'from=2017-11-24&' +
+			'sortBy=popularity&' +
+			'apiKey=950b36bbafbe4e6592bd748b8d0d0b8b';
 
 			var req = new Request(url);
 			fetch(req)
 			    .then((response) => response.json())
 				.then((parsedData) => {
-					console.log(parsedData.articles)
-					let authorOfNews = parsedData.articles.map((article => article.author))
-	
+					console.log("DATA IS AN ARRAY OF OBJECTS", parsedData.articles)
+					let authorOfNews = parsedData.articles.map((article => article))
 					this.setState({news: authorOfNews})
 				})
 	}
@@ -59,7 +58,10 @@ class LoginPage extends React.Component {
 	        		</div>
 	        		<div className="recent-news">
 						<ul>
-			        		<li>{this.state.news}</li>
+							{this.state.news.map((article, index) => {
+								 return <li key={index}><a href={article.url}>{article.title}</a></li>
+								})
+							}
 						</ul>
 	        		</div>
 	        	</div>

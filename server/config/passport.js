@@ -83,7 +83,7 @@ module.exports = function(passport) {
                 if(!user.validPassword(password))
                     return done(null,false);
 
-                console.log("logged in user", user)
+                // console.log("logged in userrrrr", user)
 
                 return done(null, user);
             });

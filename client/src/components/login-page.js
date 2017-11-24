@@ -7,9 +7,11 @@ class LoginPage extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			seconds:  5
+			seconds:  5,
+			news: null
 		}
 		this.timer = this.timer.bind(this)
+		// this.recentNews = this.recentNews.bind(this)
 	}
 
 	timer() {
@@ -28,18 +30,19 @@ class LoginPage extends React.Component {
           'apiKey=950b36bbafbe4e6592bd748b8d0d0b8b';
 
 			var req = new Request(url);
-
 			fetch(req)
 			    .then((response) => response.json())
-				.then(function(parsedData) {
+				.then((parsedData) => {
 					console.log(parsedData.articles)
+					let authorOfNews = parsedData.articles.map((article => article.author))
+	
+					this.setState({news: authorOfNews})
 				})
 	}
 
 	componentWillMount() {
 		clearInterval(this.interval)
 	}
-
 
 	render() {
 	    return (
@@ -53,6 +56,11 @@ class LoginPage extends React.Component {
 		        				Login with Twitter
 		        		</NavItem>
 	        		<DemoLogin />
+	        		</div>
+	        		<div className="recent-news">
+						<ul>
+			        		<li>{this.state.news}</li>
+						</ul>
 	        		</div>
 	        	</div>
 			</div>

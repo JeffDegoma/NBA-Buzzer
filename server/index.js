@@ -105,7 +105,6 @@ app.get('/api/twitter', (req, res) => {
                     // send back an array of objects that contain the profile
                     // img url and tweet_status
                     let tweets = data.statuses.map(function(tweet){
-                        console.log()
                         let TwitterImageUrl= tweet.user.profile_image_url_https
                         let imageUrl = TwitterImageUrl.replace('_normal' , '')
                         

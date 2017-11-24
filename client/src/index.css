@@ -78,6 +78,12 @@ body, html {
   color: #ffa500;
 }
 
+
+.recent-news {
+  width:  400px;
+  height: 400px;
+}
+
 .tweet-card i.right {
 	margin-top: -10px;
 }

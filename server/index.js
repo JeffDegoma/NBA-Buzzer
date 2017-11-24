@@ -77,16 +77,16 @@ app.get('/api/auth/logout', (req, res) => {
     res.redirect('/');
 });
 
-const urL = 'http://api.suredbits.com/nba/v0/games/phi/2017/11'
-request(urL, (error, response, body) => {
-        let teamInfo = JSON.parse(body)
-            teamInfo.map(function(team){
-                let gameId = team.gameId
+// const urL = 'http://api.suredbits.com/nba/v0/games/phi/2017/11'
+// request(urL, (error, response, body) => {
+//         let teamInfo = JSON.parse(body)
+//             teamInfo.map(function(team){
+//                 let gameId = team.gameId
 
-                console.log(gameId)
-            })
-            // console.log(teamInfo)
-        })
+//                 console.log(gameId)
+//             })
+//             // console.log(teamInfo)
+//         })
 
 
 //Search NBA Tweets

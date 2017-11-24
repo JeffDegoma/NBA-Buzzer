@@ -21,11 +21,25 @@ class LoginPage extends React.Component {
 
 	componentDidMount() {
 		this.interval = setInterval(this.timer, 1000)
+		var url = 'https://newsapi.org/v2/everything?' +
+          'q=Apple&' +
+          'from=2017-11-24&' +
+          'sortBy=popularity&' +
+          'apiKey=950b36bbafbe4e6592bd748b8d0d0b8b';
+
+			var req = new Request(url);
+
+			fetch(req)
+			    .then((response) => response.json())
+				.then(function(parsedData) {
+					console.log(parsedData.articles)
+				})
 	}
 
 	componentWillMount() {
 		clearInterval(this.interval)
 	}
+
 
 	render() {
 	    return (

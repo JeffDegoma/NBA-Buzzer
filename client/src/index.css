@@ -23,7 +23,7 @@ body, html {
 }
 
 .cta {
-  min-height: 55%;
+  /*height: 0px;*/
   display: flex;
   margin: auto;
   flex-direction: column
@@ -73,16 +73,48 @@ body, html {
   justify-content: center
 }
 
-.shot-clock > span{
+.shot-clock {
   font-size: 4em;
   color: #ffa500;
 }
 
 
+.shot-clock-display {
+  display: none;
+}
+
 .recent-news {
+  margin: auto;
   background-color: white;
-  width:  400px;
-  height: 400px;
+  width:  550px;
+  height: 270px;
+  padding: 20px;
+  margin-top: 0px;
+}
+
+.main {
+  display: flex;
+}
+
+.main-content {
+  flex: 1;
+}
+
+.tweet-sidebar {
+  flex: 0;
+}
+
+.headlines-list-item {
+  text-decoration: underline;
+  line-height: 2.2em;
+}
+
+.recent-news > ul {
+  margin-top: 0;
+}
+
+.grid-example {
+  width: 350px;
 }
 
 .tweet-card i.right {
@@ -170,3 +202,52 @@ nav ul a:hover{
   color: white;
 }
 
+
+
+.todo-item {
+  width: 100px;
+  height: 100px;
+  background-color: red;
+  float: left;
+  border: solid 2px white;
+  box-sizing: border-box;
+}
+
+
+.fade-enter {
+  opacity: 0.01;
+}
+
+.fade-enter-active {
+  opacity: 1;
+  transition: opacity 1s;
+  visibility: visible;
+}
+
+/*.fade-leave {
+  opacity: 1;
+}
+
+.fade-leave-active {
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+*/
+
+.example-enter {
+  opacity: 0.01;
+}
+
+.example-enter.example-enter-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+}
+
+.example-leave {
+  opacity: 1;
+}
+
+.example-leave.example-leave-active {
+  opacity: 0.01;
+  transition: opacity 300ms ease-in;
+}

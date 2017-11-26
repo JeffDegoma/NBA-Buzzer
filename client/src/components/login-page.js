@@ -1,6 +1,11 @@
 import React from 'react';
 import { NavItem } from 'react-materialize';
 import DemoLogin from './demo-login';
+import { CSSTransitionGroup } from 'react-transition-group' // ES6
+import TransitionGroup from 'react-transition-group/TransitionGroup' // ES6
+
+import Fader from './Fader'
+
 
 
 class LoginPage extends React.Component {
@@ -8,21 +13,24 @@ class LoginPage extends React.Component {
 		super(props);
 		this.state = {
 			seconds:  5,
-			news: []
+			news: [],
+			timerUp: false
 		}
 		this.timer = this.timer.bind(this)
 	}
+
 
 	timer() {
 		this.setState({seconds: this.state.seconds - 1})
 		if(this.state.seconds <= 0){
 			clearInterval(this.interval)
+			this.setState({timerUp: !this.state.timerUp})
 		}
 	}
 
 	componentDidMount() {
 		this.interval = setInterval(this.timer, 1000)
-		var url = 'https://newsapi.org/v2/everything?' +
+		var url = 'https://newsapi.org/v2/top-headlines?' +
 			'domains=espn.com&' + 
 			'q=NBA&' +
 			'from=2017-11-24&' +
@@ -43,11 +51,29 @@ class LoginPage extends React.Component {
 		clearInterval(this.interval)
 	}
 
+	//this component gets rendered if the timer is up otherwise, return null
+	renderShotClock() {
+        if (!this.state.timerUp) {
+            return (
+                <div className="shot-clock" key={1}>
+                    {this.state.seconds}
+                </div>
+            );
+        } else {
+            return null;
+        }
+    }
+
+
 	render() {
+		var className = this.state.timerUp ? 'shot-clock-display' : 'shot-clock';
+		var example = this.state.timerUp ? 'div' : 'shot-clock-display'
+
 	    return (
     		<div className="intro">
 	     		<div className="cta">
-	        		<div className="shot-clock"><span>{this.state.seconds}</span></div>
+	        		<Fader>{this.renderShotClock()}</Fader>
+
 		     		<div className="cta-content">
 		        		<NavItem
 		        			className="cta-btn"
@@ -56,15 +82,20 @@ class LoginPage extends React.Component {
 		        		</NavItem>
 	        		<DemoLogin />
 	        		</div>
-	        		<div className="recent-news">
+	        	</div>
+
+	        {/*	<TransitionGroup
+	        		component={example}
+	        		transitionName="example"
+	        		className="recent-news">
 						<ul>
 							{this.state.news.map((article, index) => {
-								 return <li key={index}><a href={article.url}>{article.title}</a></li>
+								 return <li className="headlines-list-item" key={index}><a href={article.url} target="blank">{article.title}</a></li>
 								})
 							}
 						</ul>
-	        		</div>
-	        	</div>
+        		</TransitionGroup>*/}
+
 			</div>
 		);
 	}

@@ -3,12 +3,12 @@ import { CSSTransitionGroup } from 'react-transition-group' // ES6
 
 
 
-
 const Fader = ({ children }) => (
   <CSSTransitionGroup
     transitionName='example'
-    transitionEnterTimeout={2000}
-    transitionLeaveTimeout={200}
+    transitionEnterTimeout={500}
+    transitionLeaveTimeout={5}
+    className='fader-parent'
     >
     { children }
   </CSSTransitionGroup>

@@ -1,8 +1,6 @@
 import React from 'react';
 import { NavItem } from 'react-materialize';
 import DemoLogin from './demo-login';
-import { CSSTransitionGroup } from 'react-transition-group' // ES6
-import TransitionGroup from 'react-transition-group/TransitionGroup' // ES6
 
 import Fader from './Fader'
 
@@ -29,19 +27,27 @@ class LoginPage extends React.Component {
 	}
 
 	componentDidMount() {
+		let today = new Date()
+		let year = today.getUTCFullYear()
+		let month = today.getUTCMonth()
+		let day = today.getUTCDate();
+
+		let fromQuery = `${year}-${month}-${day}`
+
 		this.interval = setInterval(this.timer, 1000)
-		var url = 'https://newsapi.org/v2/top-headlines?' +
-			'domains=espn.com&' + 
+		let url = 'https://newsapi.org/v2/everything?' +
 			'q=NBA&' +
-			'from=2017-11-24&' +
-			'sortBy=popularity&' +
+			'sources=ESPN&' +
+			`from=${fromQuery}` +
+			'sortBy=publishedAt&' +
+			'page=1&' +
 			'apiKey=950b36bbafbe4e6592bd748b8d0d0b8b';
 
-			var req = new Request(url);
+			let req = new Request(url);
 			fetch(req)
 			    .then((response) => response.json())
 				.then((parsedData) => {
-					console.log("DATA IS AN ARRAY OF OBJECTS", parsedData.articles)
+					// console.log("DATA IS AN ARRAY OF OBJECTS", parsedData.articles)
 					let authorOfNews = parsedData.articles.map((article => article))
 					this.setState({news: authorOfNews})
 				})
@@ -64,16 +70,10 @@ class LoginPage extends React.Component {
         }
     }
 
-
-	render() {
-		var className = this.state.timerUp ? 'shot-clock-display' : 'shot-clock';
-		var example = this.state.timerUp ? 'div' : 'shot-clock-display'
-
-	    return (
-    		<div className="intro">
-	     		<div className="cta">
-	        		<Fader>{this.renderShotClock()}</Fader>
-
+	renderCTA() {
+        if (this.state.timerUp) {
+            return (
+                <div className="cta">
 		     		<div className="cta-content">
 		        		<NavItem
 		        			className="cta-btn"
@@ -82,20 +82,31 @@ class LoginPage extends React.Component {
 		        		</NavItem>
 	        		<DemoLogin />
 	        		</div>
-	        	</div>
-
-	        {/*	<TransitionGroup
-	        		component={example}
-	        		transitionName="example"
-	        		className="recent-news">
+	        		<br/>
+	        		<div className="recent-news">
+	        		<h3>Top NBA News</h3>
 						<ul>
 							{this.state.news.map((article, index) => {
 								 return <li className="headlines-list-item" key={index}><a href={article.url} target="blank">{article.title}</a></li>
 								})
 							}
 						</ul>
-        		</TransitionGroup>*/}
+					</div>
+	        	</div>
+	        	
 
+            );
+        } else {
+            return null;
+        }
+    }
+
+	render() {
+
+	    return (
+    		<div className="intro">
+	    		<Fader>{this.renderShotClock()}</Fader>	     	
+	    		<Fader>{this.renderCTA()}</Fader>	     	
 			</div>
 		);
 	}

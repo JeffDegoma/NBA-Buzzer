@@ -22,8 +22,7 @@ body, html {
   background-position: center;
 }
 
-.cta {
-  /*height: 0px;*/
+.fader-parent, .cta {
   display: flex;
   margin: auto;
   flex-direction: column
@@ -33,7 +32,7 @@ body, html {
     list-style: none;
     text-align: center;
     text-transform: uppercase;
-    padding: 1em;
+    padding: 7px;
     transition: .2s ease-out;
     cursor: pointer;
 }
@@ -84,12 +83,19 @@ body, html {
 }
 
 .recent-news {
+  border-radius: 6px;
   margin: auto;
   background-color: white;
-  width:  550px;
+  width:  600px;
   height: 270px;
-  padding: 20px;
+  padding: 10px 5px;
   margin-top: 0px;
+  overflow: scroll;
+}
+
+.recent-news > h3 {
+  text-align: center;
+  color: gray;
 }
 
 .main {
@@ -105,8 +111,11 @@ body, html {
 }
 
 .headlines-list-item {
-  text-decoration: underline;
   line-height: 2.2em;
+}
+
+.headlines-list-item:hover {
+    text-decoration: underline;
 }
 
 .recent-news > ul {
@@ -224,7 +233,7 @@ nav ul a:hover{
   visibility: visible;
 }
 
-/*.fade-leave {
+.fade-leave {
   opacity: 1;
 }
 
@@ -232,7 +241,7 @@ nav ul a:hover{
   opacity: 0;
   transition: opacity 0.5s;
 }
-*/
+
 
 .example-enter {
   opacity: 0.01;
@@ -240,7 +249,7 @@ nav ul a:hover{
 
 .example-enter.example-enter-active {
   opacity: 1;
-  transition: opacity 500ms ease-in;
+  transition: opacity 600ms ease-in;
 }
 
 .example-leave {
@@ -249,5 +258,5 @@ nav ul a:hover{
 
 .example-leave.example-leave-active {
   opacity: 0.01;
-  transition: opacity 300ms ease-in;
+  transition: opacity 5ms ease-in;
 }

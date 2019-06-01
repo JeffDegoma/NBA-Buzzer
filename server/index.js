@@ -120,6 +120,32 @@ app.get('/api/twitter', (req, res) => {
         })
 })
 
+
+app.post('/api/twitter', (req, res) => {
+        // send back data from Twitter
+        T.get('search/tweets', 
+            { q: 'NBA since:2017-1-11', count: 12 }, 
+                function(err, data, response) {
+                    // send back an array of objects that contain the profile
+                    // img url and tweet_status
+                    let tweets = data.statuses.map(function(tweet){
+                        let TwitterImageUrl= tweet.user.profile_image_url_https
+                        let imageUrl = TwitterImageUrl.replace('_normal' , '')
+                        
+                        const retTweet = {
+                            img: imageUrl,
+                            text: tweet.text,
+                            created: tweet.created_at,
+                            tweetID: tweet.id_str
+                        }
+                        return retTweet
+                    })
+                    res.send(tweets)
+        })
+})
+
+
+
 //Route to save tweets into database
 app.post('/api/favorites/save', passport.authenticate('bearer', {session: false}), (req,res)=>{
     const tweet = req.body

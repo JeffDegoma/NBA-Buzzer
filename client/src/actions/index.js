@@ -31,7 +31,7 @@ export const GET_USER = 'GET_USER';
 export const getUser = user => ({
     type: GET_USER,
     user
-});
+}); 
 
 
 export const saveToFavorites = tweet => dispatch => {
@@ -147,6 +147,9 @@ export const fetchSeedTweets = () => dispatch => {
 
 }
 
+
+
+
 export const fetchUser = () => dispatch => {
 
     const url = '/api/me';
@@ -181,6 +184,15 @@ export const fetchUser = () => dispatch => {
         dispatch(getUser(null))
     }
 }
+
+
+//ajax call to the back-end to search for tweets
+//check modalLogin 
+
+export const searchTweet = (search) => dispatch => {
+    const query = {search}
+}
+
 
 
 export const modalLogin = (email, password) => dispatch => {

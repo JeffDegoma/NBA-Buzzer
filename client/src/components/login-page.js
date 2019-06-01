@@ -17,6 +17,8 @@ class LoginPage extends React.Component {
 		this.timer = this.timer.bind(this)
 	}
 
+    
+
 
 	timer() {
 		this.setState({seconds: this.state.seconds - 1})
@@ -29,26 +31,30 @@ class LoginPage extends React.Component {
 	componentDidMount() {
 		let today = new Date()
 		let year = today.getUTCFullYear()
-		let month = today.getUTCMonth()
+		let month = today.getUTCMonth() + 1
 		let day = today.getUTCDate();
 
-		let fromQuery = `${year}-${month}-${day}`
+        let fromQuery = `${year}-${month}-${day}`
+		let toQuery = `${year}-${month}-${day}`
+        console.log(fromQuery)
 
-		this.interval = setInterval(this.timer, 1000)
-		let url = 'https://newsapi.org/v2/everything?' +
-			'q=NBA&' +
-			'sources=ESPN&' +
-			`from=${fromQuery}` +
-			'sortBy=publishedAt&' +
-			'page=1&' +
-			'apiKey=950b36bbafbe4e6592bd748b8d0d0b8b';
+        this.interval = setInterval(this.timer, 1000)
+        let url = 'https://newsapi.org/v2/everything?' +
+            'q=NBA&' +
+            'domains=espn.com&' +
+            `from=${fromQuery}` +
+            // `to=${toQuery}` +
+            'sortBy=publishedAt&' +
+            'page=1&' +
+            'apiKey=950b36bbafbe4e6592bd748b8d0d0b8b';
 
+        console.log(url)
 			let req = new Request(url);
 			fetch(req)
 			    .then((response) => response.json())
 				.then((parsedData) => {
-					// console.log("DATA IS AN ARRAY OF OBJECTS", parsedData.articles)
-					let authorOfNews = parsedData.articles.map((article => article))
+					console.log("DATA IS AN ARRAY OF OBJECTS", parsedData.articles)
+					let authorOfNews = parsedData.articles.map((article => article)).slice(0, 10)
 					this.setState({news: authorOfNews})
 				})
 	}
@@ -93,8 +99,6 @@ class LoginPage extends React.Component {
 						</ul>
 					</div>
 	        	</div>
-	        	
-
             );
         } else {
             return null;

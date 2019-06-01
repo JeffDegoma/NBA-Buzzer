@@ -20,6 +20,8 @@ class TweetPage extends React.Component {
     saveTweet(tweet){
         this.props.dispatch(actions.saveToFavorites(tweet));
     }
+
+    
     
     render() {
         //an array of what comes back from our Twitter call

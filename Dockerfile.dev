@@ -1,1 +1,13 @@
-FROM 
+FROM node:10.15.3
+
+RUN mkdir /nba-buzzer
+
+WORKDIR /nba-buzzer
+
+COPY package.json /nba-buzzer
+
+RUN npm i
+
+CMD ["npm", "build"]
+
+EXPOSE 7654

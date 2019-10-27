@@ -49,5 +49,4 @@ export const nbaStateReducer = (state = nbaState, action) => {
 	}
 
 	return state;
-
 }
